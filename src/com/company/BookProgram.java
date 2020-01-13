@@ -7,8 +7,8 @@ public class BookProgram {
     ArrayList<Book> books = new ArrayList<>();
 
     public BookProgram() {
-        addBooks();
         showAllBookList();
+        addBooks();
     }
 
     private void addBooks() {
@@ -24,20 +24,17 @@ public class BookProgram {
         books.add(new Book("Java For Pros", "Hassan A", "Hassan jobbar som bagare, men drömmer om att bli programmerare", true));
     }
 
-    private void showAllBookList() {
+   void showAllBookList() {
         for (Book book : books) {
             System.out.println(showAllBookInformationAndAvailability(book));
-            ;
         }
     }
 
-    private String showAllBookInformation(Book book) {
+    public String showAllBookInformation(Book book) {
         return String.format("%-20s %-20s %-50s\n ", book.getTitle(), book.getAuthor(), book.getInformation());
     }
 
-    private String showAllBookInformationAndAvailability(Book book) {
+    public String showAllBookInformationAndAvailability(Book book) {
         return String.format("%-20s %-20s %-50s %b\n ", book.getTitle(), book.getAuthor(), book.getInformation(), book.isAvailability());
-
-
     }
 }
