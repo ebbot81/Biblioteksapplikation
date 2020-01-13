@@ -13,8 +13,6 @@ public class Book {
         this.availability = availability;
     }
 
-
-
     public String getTitle() {
         return title;
     }
