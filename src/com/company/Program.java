@@ -3,8 +3,9 @@ package com.company;
 import java.util.Scanner;
 
 public class Program {
+    CustomerProgram customerProgram = new CustomerProgram();
     Scanner scanner = new Scanner(System.in);
-    BookProgram bookProgram = new BookProgram();
+  //  BookProgram bookProgram = new BookProgram();
 
     public Program() {
     }
@@ -41,7 +42,7 @@ public class Program {
                 case 1:
                     System.out.println("HÄR SER DU ALLA BÖCKER SOM FINNS: ");
                     System.out.println("-------------------------------\n ");
-                    bookProgram.showAllBookList();
+          //          bookProgram.showAllBookList();
                     break;
                 case 2:
                     System.out.println("HÄR SER DU VILKA BÖCKER SOM FINNS TILLGÄNGLIGA: ");
@@ -137,7 +138,7 @@ public class Program {
                     break;
                 case 6:
                     System.out.println("HÄR KAN DU SE VILKA BÖCKER ANVÄNDARNA HAR LÅNAT: ");
-                    System.out.println("----------------------------------\n ");
+                    System.out.println("----------------------------------------------\n ");
                     break;
                 case 7:
                     System.out.println("HÄR KAN DU LOGGA IN PÅ APPEN: ");
