@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Program {
     CustomerProgram customerProgram = new CustomerProgram();
     Scanner scanner = new Scanner(System.in);
-  //  BookProgram bookProgram = new BookProgram();
+    BookProgram bookProgram = new BookProgram();
 
     public Program() {
     }
@@ -42,22 +42,25 @@ public class Program {
                 case 1:
                     System.out.println("HÄR SER DU ALLA BÖCKER SOM FINNS: ");
                     System.out.println("-------------------------------\n ");
-          //          bookProgram.showAllBookList();
+                //    bookProgram.showAllBookInformation();
+
                     break;
                 case 2:
                     System.out.println("HÄR SER DU VILKA BÖCKER SOM FINNS TILLGÄNGLIGA: ");
                     System.out.println("---------------------------------------------\n ");
+                    bookProgram.showAllBookList();
 
                     break;
                 case 3:
                     System.out.println("HÄR KAN DU SÖKA PÅ EN SPECIFIK BOKS INFO : ");
                     System.out.println("----------------------------------------\n ");
-                //    bookProgram.showAllBookInformation(Book book);
+              //      System.out.println(bookProgram.showAllBookInformation());
                     break;
                 case 4:
                     System.out.println("HÄR KAN DU SÖKA PÅ BOKTITEL ELLER FÖRFATTARE: ");
                     System.out.println("-------------------------------------------\n ");
-
+                    bookProgram.searchByTitle( "Vilken titel söker du?", "Tyvärr finns inte titeln du sökte, försök igen", "Tyvärr är boken utlånad för tillfället");
+                    bookProgram.searchByAuthor("Vilken författare söker du?", "Tyvärr finns inte författaren du sökte, försök igen");
                     break;
                 case 5:
                     System.out.println("HÄR KAN DU LÅNA EN BOK:");
@@ -67,17 +70,16 @@ public class Program {
                 case 6:
                     System.out.println("HÄR KAN DU SE VILKA BÖCKER DU LÅNAT: ");
                     System.out.println("----------------------------------\n ");
-
+                    customerProgram.showMyBorrowedBooks();
                     break;
                 case 7:
                     System.out.println("HÄR KAN DU LÄMNA TILLBAKA EN BOK: ");
                     System.out.println("-------------------------------\n ");
-
                     break;
+
                 case 8:
-                    System.out.println("HÄR ÄR BIBLIOTEKARIENS MENY: ");
-                    System.out.println("--------------------------\n ");
                     librarianMenu();
+
                 case 9:
                     return;
 
