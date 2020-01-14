@@ -32,4 +32,16 @@ public class Book {
     public void setAvailability(boolean availability) {
         this.availability = availability;
     }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setInformation(String information) {
+        this.information = information;
+    }
 }
