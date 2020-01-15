@@ -21,13 +21,29 @@ public class CustomerProgram {
     }
 */
 
- public void addBooks(String book) {
-     books.add(book);
+ public void addBookToList(String newBook, String newAuthor, String newInfo ) {
+     String newBookTitle = newBook + newAuthor + newInfo;
+     System.out.println("Vad heter boken du vill lägga till i listan? ");
+     newBook = scanner.nextLine();
+     System.out.println("Vem har skrivit boken? ");
+     newAuthor = scanner.nextLine();
+     System.out.println("Skriv in lite information om boken. ");
+     newInfo = scanner.nextLine();
+     System.out.println("Du lade till:\nBok: " + newBook + "\nFörfattare: " + newAuthor + "\nInformation om boken: " + newInfo );
+     books.add(newBookTitle);
  }
 
- public void removeBooks(String book) {
-     books.remove(0);
+ public void removeBookFromList() {
+     String removeBook;
+     System.out.println("Vilken bok vill du ta bort? \n");
+     bookProgram.showAllBookList();
+     removeBook = scanner.nextLine();
+     System.out.println("Du tog bort: " + removeBook + " från listan");
+     if (removeBook.equals("")) {
+         books.remove(removeBook);
+     }
  }
+
 
  public void borrowBook(String borrow) {
     books.add(borrow);
