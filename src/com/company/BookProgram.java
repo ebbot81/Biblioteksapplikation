@@ -9,7 +9,7 @@ public class BookProgram {
     private Scanner scanner = new Scanner(System.in);
 
     public BookProgram() {
-     //   showAllBookList();
+        //   showAllBookList();
         addBooks();
     }
 
@@ -27,10 +27,10 @@ public class BookProgram {
     }
 
    public void showAllBookList() {
-        for (Book book : books) {
-            System.out.println(showAllBookInformationAndAvailability(book));
-        }
-    }
+       for (Book book : books) {
+           System.out.println(showAllBookInformationAndAvailability(book));
+       }
+   }
 
     public String showAllBookInformation(Book book) {
         return String.format("%-20s %-20s %-50s\n ", book.getTitle(), book.getAuthor(), book.getInformation());

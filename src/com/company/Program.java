@@ -11,7 +11,43 @@ public class Program {
     }
 
     public void start() {
-        int menu;
+        int chooseMenu;
+        do {
+            System.out.println("\nVILKEN MENY VILL DU BESÖKA?");
+            System.out.println("-----------------------------");
+            System.out.println("[1] KUNDENS MENY");
+            System.out.println("[2] BIBLIOTEKARIENS MENY (INLOGGNING KRÄVS)");
+            System.out.println("[3] AVSLUTA");
+
+            do {
+                try {
+                    chooseMenu = Integer.parseInt(scanner.nextLine());
+                    if (chooseMenu < 1 || chooseMenu > 3) {
+                        throw new IndexOutOfBoundsException();
+                    }
+                    break;
+                } catch (Exception e) {
+                    System.out.println("Välj ett nummer mellan 1-3");
+                }
+            } while (true);
+
+            switch (chooseMenu) {
+                case 1:
+                    customerMenu();
+                    break;
+                case 2:
+                    librarianMenu();
+                    break;
+                case 3:
+                    return;
+                default:
+                    break;
+            }
+        } while (true);
+    }
+
+        private void customerMenu() {
+        int custMenu;
         do {
             System.out.println("\nBIBLIOTEKSAPPLIKATIONEN - KUNDENS MENY");
             System.out.println("--------------------------------------");
@@ -23,22 +59,21 @@ public class Program {
             System.out.println("[5] LÅNA EN BOK");
             System.out.println("[6] SE VILKA BÖCKER DU LÅNAT");
             System.out.println("[7] LÄMNA TILLBAKA EN BOK");
-            System.out.println("[8] GÅ TILL BIBLIOTEKARIENS MENY");
-            System.out.println("[9] AVSLUTA");
+            System.out.println("[8] AVSLUTA");
 
             do {
                 try {
-                    menu = Integer.parseInt(scanner.nextLine());
-                    if (menu < 1 || menu > 9) {
+                    custMenu = Integer.parseInt(scanner.nextLine());
+                    if (custMenu < 1 || custMenu > 8) {
                         throw new IndexOutOfBoundsException();
                     }
                     break;
                 } catch (Exception e) {
-                    System.out.println("Välj ett nummer mellan 1-9");
+                    System.out.println("Välj ett nummer mellan 1-8");
                 }
             } while (true);
 
-            switch (menu) {
+            switch (custMenu) {
                 case 1:
                     System.out.println("HÄR SER DU ALLA BÖCKER SOM FINNS: ");
                     System.out.println("-------------------------------\n ");
@@ -76,13 +111,8 @@ public class Program {
                     System.out.println("HÄR KAN DU LÄMNA TILLBAKA EN BOK: ");
                     System.out.println("-------------------------------\n ");
                     break;
-
                 case 8:
-                    librarianMenu();
-
-                case 9:
                     return;
-
                 default:
                     break;
             }
@@ -90,7 +120,7 @@ public class Program {
     }
 
     private void librarianMenu() {
-        int menu;
+        int libMenu;
         do {
             System.out.println("\nBIBLIOTEKSAPPLIKATIONEN - BIBLIOTEKARIENS MENY");
             System.out.println("------------------------------------------------");
@@ -102,22 +132,21 @@ public class Program {
             System.out.println("[5] SÖKA PÅ SPECIFIK ANVÄNDARE");
             System.out.println("[6] SE EN LISTA PÅ ANVÄNDARNAS LÅNADE BÖCKER");
             System.out.println("[7] LOGGA IN PÅ APPEN");
-            System.out.println("[8] GÅ TILL KUNDENS MENY");
-            System.out.println("[9] AVSLUTA");
+            System.out.println("[8] AVSLUTA");
 
             do {
                 try {
-                    menu = Integer.parseInt(scanner.nextLine());
-                    if (menu < 1 || menu > 9) {
+                    libMenu = Integer.parseInt(scanner.nextLine());
+                    if (libMenu < 1 || libMenu > 8) {
                         throw new IndexOutOfBoundsException();
                     }
                     break;
                 } catch (Exception e) {
-                    System.out.println("Välj ett nummer mellan 1-9");
+                    System.out.println("Välj ett nummer mellan 1-8");
                 }
             } while (true);
 
-            switch (menu) {
+            switch (libMenu) {
                 case 1:
                     System.out.println("HÄR SER DU ALLA UTLÅNADE BÖCKER: ");
                     System.out.println("------------------------------\n ");
@@ -125,10 +154,12 @@ public class Program {
                 case 2:
                     System.out.println("HÄR KAN DU LÄGGA TILL NYA BÖCKER: ");
                     System.out.println("-------------------------------\n ");
+                    customerProgram.addBookToList("","","");
                     break;
                 case 3:
                     System.out.println("HÄR KAN DU TA BORT BÖCKER: ");
                     System.out.println("------------------------\n ");
+                    customerProgram.removeBookFromList();
                     break;
                 case 4:
                     System.out.println("HÄR KAN DU SE ALLA ANVÄNDARE SOM FINNS I SYSTEMET: ");
@@ -147,17 +178,10 @@ public class Program {
                     System.out.println("---------------------------\n ");
                     break;
                 case 8:
-                    System.out.println("HÄR ÄR KUNDENS MENY: ");
-                    System.out.println("------------------\n ");
-                    start();
-                case 9:
                     return;
-
                 default:
                     break;
             }
         } while (true);
     }
 }
-
-
