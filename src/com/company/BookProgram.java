@@ -15,15 +15,25 @@ public class BookProgram {
 
     private void addBooks() {
         books.add(new Book("Ondskan", "Jan Guillou", "En bok om ondska", true));
-        books.add(new Book("Tomten är far till alla barnen", "Ernst Göransson", "Tomten krånglar till det", true));
+        books.add(new Book("Tomten strular", "Ernst Göransson", "Tomten krånglar till det", true));
         books.add(new Book("Stina Bakar", "Stina Olsson", "Stina älskar att laga lasagne", true));
-        books.add(new Book("Dinosauriernas återkomst", "Jens Schneider", "Dinosaurierna kommer tillbaka", true));
+        books.add(new Book("Dinosaurierna", "Jens Schneider", "Dinosaurierna kommer tillbaka", true));
         books.add(new Book("Antika trädgårdar", "Örjan Rahmberg", "Väldigt antika trädgårdar visas upp...", true));
         books.add(new Book("Grönsakskungen", "Lennart Svahnsson", "Lennart kan allt om grönsaker", true));
         books.add(new Book("Hattkriget", "Lena Borselius", "Vem kan ta på sig flest hattar på kortast tid?", true));
         books.add(new Book("Något i görningen", "Alex Schulman", "En inflytelserik politiker har något i görningen", true));
         books.add(new Book("Det vita huset", "Gösta Anderhjelm", "Huvudpersonen bygger ett hus på kort tid", true));
         books.add(new Book("Java For Pros", "Hassan A", "Hassan gillar att programmera", true));
+    }
+    public String headLines(Book book) {
+        return String.format("%-20s %-20s %-50s\n ", book.getTitle(), book.getAuthor(), book.getInformation());
+    }
+
+    public void headLines() {
+        System.out.print(String.format("\nTITEL"));
+        System.out.print(String.format("%26s", "FÖRFATTARE"));
+        System.out.print(String.format("%23s", "INFORMATION\n"));
+        System.out.println("-----------------------------------------------------\n");
     }
 
     public void showAllBookList() {
@@ -44,7 +54,11 @@ public class BookProgram {
     }
 
     public String showAllBookInformationAndAvailability(Book book) {
-        return String.format(" Boktitel: %-20s\n Författare: %-20s\n Info: %-50s %-100b\n ", book.getTitle(), book.getAuthor(), book.getInformation(), book.isAvailability());
+        if (book.isAvailability() == true) {
+            System.out.println("Tillgänglig");
+        } else System.out.println("Utlånad");
+        return String.format(" Boktitel: %-20s\n Författare: %-20s\n Info: %-50s\n\n", book.getTitle(), book.getAuthor(), book.getInformation());
+
     }
 
     public Book searchByTitleOrAuthorIfTrue(String welcomeMessage, String messageIfFail, String bookNotAvailable) {
@@ -115,5 +129,6 @@ public class BookProgram {
                 System.out.println(messageIfFail);
         }
     }
+
 }
 

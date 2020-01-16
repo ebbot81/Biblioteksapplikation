@@ -1,6 +1,7 @@
 package com.company;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Program {
@@ -133,15 +134,12 @@ public class Program {
 
             switch (custMenu) {
                 case 1:
-                    System.out.println("HÄR SER DU ALLA BÖCKER SOM FINNS: ");
-                    System.out.println("-------------------------------\n ");
+                    bookProgram.headLines();
                     bookProgram.showAllBookInformationWithOutAvailability(bookProgram.books);
-
-
                     break;
                 case 2:
-                    System.out.println("HÄR SER DU VILKA BÖCKER SOM FINNS TILLGÄNGLIGA: ");
-                    System.out.println("---------------------------------------------\n ");
+                    System.out.println("\nHÄR SER DU VILKA BÖCKER SOM FINNS TILLGÄNGLIGA OCH VILKA SOM ÄR UTLÅNADE: ");
+                    System.out.println("------------------------------------------------------------------------\n ");
                     bookProgram.showAllBookList();
 
                     break;
@@ -172,9 +170,9 @@ public class Program {
                     System.out.println("-------------------------------\n ");
                     customerProgram.showMyBorrowedBooks(currentCustomer.getBooks());
                     customerProgram.returnBook(currentCustomer);
-                    customerMenu();
                     break;
                 case 8:
+                    start();
                     return;
                 default:
                     break;
@@ -206,7 +204,7 @@ public class Program {
                     }
                     break;
                 } catch (Exception e) {
-                    System.out.println("Välj ett nummer mellan 1-8");
+                    System.out.println("Välj ett nummer mellan 1-9");
                 }
             } while (true);
 
@@ -247,11 +245,23 @@ public class Program {
                     System.out.println("---------------------------\n ");
                     break;
                 case 9:
+                    start();
                     return;
                 default:
                     break;
             }
         } while (true);
+    }
+
+    private void addBooksFromFile(ArrayList<Book> listOfBooksToAddBooksTo, String fileName) {
+        List<String> lines = SaveAndLoadFile.readAllLines(fileName);
+        for (String str : lines) {
+            String[] parts = str.split(",");
+            for (int i = 0; i < str.length(); i++) {
+                listOfBooksToAddBooksTo.add(new Book(parts[0], parts[1], parts[2], true));
+                break;
+            }
+        }
     }
 
     public static CustomerProgram getCustomerProgram() {

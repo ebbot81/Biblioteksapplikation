@@ -32,7 +32,7 @@ public class CustomerProgram {
 
 
  public void borrowBook(Customer customerListToAddBookTo) {
-     customerListToAddBookTo.addBook( Program.getBookProgram().searchByTitleOrAuthorIfTrue("Vilken bok vill du låna?", "Boken du sökte finns inte, försök igen med exakt boktitel eller författarnamn", "Tyvärr är boken du sökte utlånad för tillfället"));;
+     customerListToAddBookTo.addBook( Program.getBookProgram().searchByTitleOrAuthorIfTrue("Vilken bok vill du låna?", "Boken du sökte finns inte, försök igen med exakt boktitel eller författarnamn", "Tyvärr är boken du sökte utlånad för tillfället"));
     }
 
     public void returnBook(Customer customerListToAddBookTo) {
