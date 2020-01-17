@@ -9,9 +9,9 @@ public class LibrarianProgram {
     private ArrayList<String> books = new ArrayList<>();
 
     public void addBookToList( ) {
-        String newBook = "";
-        String newAuthor = "";
-        String newInfo = "";
+        String newBook;
+        String newAuthor;
+        String newInfo;
         do {
         System.out.println("Vad heter boken du vill lägga till i listan? ");
         newBook = scanner.nextLine();
@@ -30,12 +30,12 @@ public class LibrarianProgram {
 
     public void removeBookFromList() {
         String removeBook;
+        do {
         System.out.println("Vilken bok vill du ta bort? \n");
         Program.getBookProgram().showAllBookList();
         removeBook = scanner.nextLine();
+        }while (removeBook.equals(""));
         System.out.println("Du tog bort: " + removeBook + " från listan");
-        if (removeBook.equals("")) {
-            Program.getBookProgram().books.remove(removeBook);
-        }
+        Program.getBookProgram().books.remove(removeBook);
     }
 }
