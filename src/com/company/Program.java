@@ -25,27 +25,6 @@ public class Program {
         login();*/
     }
 
-    private void login() {
-        System.out.println("Hej och välkommen, vänligen fyll i dina uppgifter och tryck sedan på ENTER");
-        do {
-            System.out.println("Skriv in ditt användarnamn: ");
-            try {
-                String userName = scanner.nextLine();
-                currentCustomer = (Customer) SaveAndLoadFile.loadObject(userName + ".ser");
-            } catch (Exception e) {
-                System.out.println("Inkorrekt användarnamn");
-            }
-            String userPassword = "";
-             do{
-                System.out.println("Skriv in lösenordet");
-                userPassword = scanner.nextLine();
-            }while (!currentCustomer.getPassword().equals(userPassword));
-            System.out.println("Korrekt inloggning");
-            return;
-        } while (true);
-    }
-
-
     private void addCustomer() {
         System.out.println("Hej och välkommen!");
         do {
@@ -74,30 +53,34 @@ public class Program {
         do {
             System.out.println("\nVILKEN MENY VILL DU BESÖKA?");
             System.out.println("-----------------------------");
-            System.out.println("[1] KUNDENS MENY");
-            System.out.println("[2] BIBLIOTEKARIENS MENY (INLOGGNING KRÄVS)");
-            System.out.println("[3] AVSLUTA");
+            System.out.println("[1] LOGGA IN");
+            System.out.println("[2] KUNDENS MENY");
+            System.out.println("[3] BIBLIOTEKARIENS MENY");
+            System.out.println("[4] AVSLUTA");
 
             do {
                 try {
                     chooseMenu = Integer.parseInt(scanner.nextLine());
-                    if (chooseMenu < 1 || chooseMenu > 3) {
+                    if (chooseMenu < 1 || chooseMenu > 4) {
                         throw new IndexOutOfBoundsException();
                     }
                     break;
                 } catch (Exception e) {
-                    System.out.println("Välj ett nummer mellan 1-3");
+                    System.out.println("Välj ett nummer mellan 1-4");
                 }
             } while (true);
 
             switch (chooseMenu) {
                 case 1:
-                    customerMenu();
+                    login();
                     break;
                 case 2:
-                    librarianMenu();
+                    customerMenu();
                     break;
                 case 3:
+                    librarianMenu();
+                    break;
+                case 4:
                     return;
                 default:
                     break;
@@ -112,7 +95,7 @@ public class Program {
             System.out.println("--------------------------------------");
             System.out.println("Vad vill du göra?\n");
             System.out.println("[1] SE ALLA BÖCKER SOM FINNS I APPEN");
-            System.out.println("[2] SE ALLA TILLGÄNGLIGA BÖCKER SOM FINNS I APPEN");
+            System.out.println("[2] SE STATUSEN PÅ BÖCKERNA SOM FINNS I APPEN");
             System.out.println("[3] SÖKER DU NÅGON SPECIFIK BOKS INFO?, TRYCK HÄR");
             System.out.println("[4] SÖKA PÅ BOKTITEL ELLER FÖRFATTARE");
             System.out.println("[5] LÅNA EN BOK");
@@ -138,8 +121,7 @@ public class Program {
                     bookProgram.showAllBookInformationWithOutAvailability(bookProgram.books);
                     break;
                 case 2:
-                    System.out.println("\nHÄR SER DU VILKA BÖCKER SOM FINNS TILLGÄNGLIGA OCH VILKA SOM ÄR UTLÅNADE: ");
-                    System.out.println("------------------------------------------------------------------------\n ");
+                    bookProgram.headLinesAndStatus();
                     bookProgram.showAllBookList();
 
                     break;
@@ -155,19 +137,16 @@ public class Program {
                     bookProgram.searchByAuthor("Vilken författare söker du?", "Tyvärr finns inte författaren du sökte, försök igen");
                     break;
                 case 5:
-                    System.out.println("HÄR KAN DU LÅNA EN BOK:");
-                    System.out.println("--------------------\n ");
+                    bookProgram.headLinesAndStatus();
                     bookProgram.showAllBookList();
                     customerProgram.borrowBook(currentCustomer);
                     break;
                 case 6:
-                    System.out.println("HÄR KAN DU SE VILKA BÖCKER DU LÅNAT: ");
-                    System.out.println("----------------------------------\n ");
+                    bookProgram.headLinesAndStatus();
                     customerProgram.showMyBorrowedBooks(currentCustomer.getBooks());
                     break;
                 case 7:
-                    System.out.println("HÄR KAN DU LÄMNA TILLBAKA EN BOK: ");
-                    System.out.println("-------------------------------\n ");
+                    bookProgram.headLinesAndStatus();
                     customerProgram.showMyBorrowedBooks(currentCustomer.getBooks());
                     customerProgram.returnBook(currentCustomer);
                     break;
@@ -187,69 +166,93 @@ public class Program {
             System.out.println("------------------------------------------------");
             System.out.println("Vad vill du göra?\n");
             System.out.println("[1] SE ALLA BÖCKER SOM FINNS I APPEN");
-            System.out.println("[2] SE ALLA UTLÅNADE BÖCKER");
-            System.out.println("[3] LÄGGA TILL NYA BÖCKER");
-            System.out.println("[4] TA BORT BÖCKER FRÅN LISTAN");
-            System.out.println("[5] SE EN LISTA PÅ ALLA ANVÄNDARE");
-            System.out.println("[6] SÖKA PÅ SPECIFIK ANVÄNDARE");
-            System.out.println("[7] SE EN LISTA PÅ ANVÄNDARNAS LÅNADE BÖCKER");
-            System.out.println("[8] LOGGA IN PÅ APPEN");
-            System.out.println("[9] AVSLUTA");
+            System.out.println("[2] SE ALLA TILLGÄNGLIGA BÖCKER");
+            System.out.println("[3] SE ALLA UTLÅNADE BÖCKER");
+            System.out.println("[4] LÄGGA TILL NYA BÖCKER");
+            System.out.println("[5] TA BORT BÖCKER FRÅN LISTAN");
+            System.out.println("[6] SE EN LISTA PÅ ALLA ANVÄNDARE");
+            System.out.println("[7] SÖKA PÅ SPECIFIK ANVÄNDARE");
+            System.out.println("[8] SE EN LISTA PÅ ANVÄNDARNAS LÅNADE BÖCKER");
+            System.out.println("[9] LOGGA IN PÅ APPEN");
+            System.out.println("[10] AVSLUTA");
 
             do {
                 try {
                     libMenu = Integer.parseInt(scanner.nextLine());
-                    if (libMenu < 1 || libMenu > 9) {
+                    if (libMenu < 1 || libMenu > 10) {
                         throw new IndexOutOfBoundsException();
                     }
                     break;
                 } catch (Exception e) {
-                    System.out.println("Välj ett nummer mellan 1-9");
+                    System.out.println("Välj ett nummer mellan 1-10");
                 }
             } while (true);
 
             switch (libMenu) {
                 case 1:
-                    System.out.println("HÄR SER DU ALLA BÖCKER SOM FINNS: ");
-                    System.out.println("-------------------------------\n ");
+                    bookProgram.headLines();
                     bookProgram.showAllBookInformationWithOutAvailability(bookProgram.books);
                     break;
                 case 2:
-                    System.out.println("HÄR SER DU ALLA UTLÅNADE BÖCKER: ");
-                    System.out.println("------------------------------\n ");
+                    bookProgram.headLinesAndStatus();
+                    bookProgram.showBookListIfAvailable();
                     break;
                 case 3:
+                    bookProgram.headLinesAndStatus();
+                    bookProgram.showBookListIfNotAvailable();
+                    break;
+                case 4:
                     System.out.println("HÄR KAN DU LÄGGA TILL NYA BÖCKER: ");
                     System.out.println("-------------------------------\n ");
                     librarianProgram.addBookToList();
                     break;
-                case 4:
+                case 5:
                     System.out.println("HÄR KAN DU TA BORT BÖCKER: ");
                     System.out.println("------------------------\n ");
                     librarianProgram.removeBookFromList();
                     break;
-                case 5:
+                case 6:
                     System.out.println("HÄR KAN DU SE ALLA ANVÄNDARE SOM FINNS I SYSTEMET: ");
                     System.out.println("------------------------------------------------\n ");
                     break;
-                case 6:
+                case 7:
                     System.out.println("HÄR KAN DU SÖKA PÅ EN SPECIFIK ANVÄNDARES NAMN:");
                     System.out.println("--------------------------------------------\n ");
                     break;
-                case 7:
+                case 8:
                     System.out.println("HÄR KAN DU SE VILKA BÖCKER ANVÄNDARNA HAR LÅNAT: ");
                     System.out.println("----------------------------------------------\n ");
                     break;
-                case 8:
+                case 9:
                     System.out.println("HÄR KAN DU LOGGA IN PÅ APPEN: ");
                     System.out.println("---------------------------\n ");
                     break;
-                case 9:
+                case 10:
                     start();
                     return;
                 default:
                     break;
             }
+        } while (true);
+    }
+
+    private void login() {
+        System.out.println("Hej och välkommen, vänligen fyll i dina uppgifter och tryck sedan på ENTER");
+        do {
+            System.out.println("Skriv in ditt användarnamn: ");
+            try {
+                String userName = scanner.nextLine();
+                currentCustomer = (Customer) SaveAndLoadFile.loadObject(userName + ".ser");
+            } catch (Exception e) {
+                System.out.println("Inkorrekt användarnamn");
+            }
+            String userPassword = "";
+            do{
+                System.out.println("Skriv in lösenordet");
+                userPassword = scanner.nextLine();
+            }while (!currentCustomer.getPassword().equals(userPassword));
+            System.out.println("Korrekt inloggning");
+            return;
         } while (true);
     }
 

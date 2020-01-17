@@ -25,20 +25,42 @@ public class BookProgram {
         books.add(new Book("Det vita huset", "Gösta Anderhjelm", "Huvudpersonen bygger ett hus på kort tid", true));
         books.add(new Book("Java For Pros", "Hassan A", "Hassan gillar att programmera", true));
     }
-    public String headLines(Book book) {
-        return String.format("%-20s %-20s %-50s\n ", book.getTitle(), book.getAuthor(), book.getInformation());
-    }
+
 
     public void headLines() {
-        System.out.print(String.format("\nTITEL"));
-        System.out.print(String.format("%26s", "FÖRFATTARE"));
-        System.out.print(String.format("%23s", "INFORMATION\n"));
-        System.out.println("-----------------------------------------------------\n");
+        System.out.print(String.format("\n%36s","TITEL"));
+        System.out.print(String.format("%36s", "FÖRFATTARE"));
+        System.out.print(String.format("%33s", "INFORMATION\n"));
+        System.out.println("                               **************************************************************************\n");
+    }
+
+    public void headLinesAndStatus() {
+        System.out.print(String.format("\n%36s", "STATUS"));
+        System.out.print(String.format("%36s","TITEL"));
+        System.out.print(String.format("%36s", "FÖRFATTARE"));
+        System.out.print(String.format("%33s", "INFORMATION\n"));
+        System.out.println("                              **************************************************************************************************************\n");
     }
 
     public void showAllBookList() {
         for (Book book : books) {
             System.out.println(showAllBookInformationAndAvailability(book));
+        }
+    }
+
+    public void showBookListIfAvailable() {
+        for (Book book : books) {
+            if (book.isAvailability() == true) {
+                System.out.println(showAllBookInformationAndAvailability(book));
+            }
+        }
+    }
+
+    public void showBookListIfNotAvailable() {
+        for (Book book : books) {
+            if (book.isAvailability() == false) {
+                System.out.println(showAllBookInformationAndAvailability(book));
+            }
         }
     }
 
@@ -50,14 +72,14 @@ public class BookProgram {
 
 
     public String showAllBookInformation(Book book) {
-        return String.format("%-20s %-20s %-50s\n ", book.getTitle(), book.getAuthor(), book.getInformation());
+        return String.format("                               %-30s %-30s %-30s\n ", book.getTitle(), book.getAuthor(), book.getInformation());
     }
 
     public String showAllBookInformationAndAvailability(Book book) {
         if (book.isAvailability() == true) {
-            System.out.println("Tillgänglig");
-        } else System.out.println("Utlånad");
-        return String.format(" Boktitel: %-20s\n Författare: %-20s\n Info: %-50s\n\n", book.getTitle(), book.getAuthor(), book.getInformation());
+            System.out.print("                              Tillgänglig");
+        } else System.out.print("                              Utlånad    ");
+        return String.format("                          %-30s %-30s %-40s\n\n", book.getTitle(), book.getAuthor(), book.getInformation());
 
     }
 
@@ -104,7 +126,7 @@ public class BookProgram {
         while (true) {
             String userInput = scanner.nextLine();
             for (Book book : books) {
-                 if (book.getTitle().equalsIgnoreCase(userInput) && book.isAvailability() == true) {
+                 if (book.getTitle().contains(userInput) && book.isAvailability() == true) {
                     book.setAvailability(false);
                     return book;
                  } else if (book.getTitle().toLowerCase().equals(userInput) && book.isAvailability() == false) {
