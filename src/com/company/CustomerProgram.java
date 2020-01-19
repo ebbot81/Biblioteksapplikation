@@ -55,8 +55,11 @@ public class CustomerProgram {
     }
 
  public void borrowBook(Customer customerListToAddBookTo) {
-     customerListToAddBookTo.addBook( Program.getBookProgram().searchByTitleOrAuthorIfTrue("Vilken bok vill du låna?", "Boken du sökte finns inte, försök igen med exakt boktitel eller författarnamn", "Tyvärr är boken du sökte utlånad för tillfället"));
-//     System.out.println("Vad kul! Du lånade");
+     Book selectedBook =  Program.getBookProgram().searchByTitleOrAuthorIfTrue("Vilken bok vill du låna?", "Boken du sökte finns inte, försök igen med exakt boktitel eller författarnamn", "Tyvärr är boken du sökte utlånad för tillfället");
+     if (selectedBook != null) {
+         customerListToAddBookTo.addBook(selectedBook);
+         System.out.println("Vad kul! Du lånade boken: " + selectedBook.getTitle() + ". Trevlig läsning :)");
+     }
     }
 
     public void returnBook(Customer customerListToRemoveBookFrom) {

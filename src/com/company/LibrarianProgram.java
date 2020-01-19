@@ -8,34 +8,40 @@ public class LibrarianProgram {
     Scanner scanner = new Scanner(System.in);
     private ArrayList<String> books = new ArrayList<>();
 
-    public void addBookToList( ) {
+    public void addBookToList() {
         String newBook;
         String newAuthor;
         String newInfo;
         do {
-        System.out.println("Vad heter boken du vill lägga till i listan? ");
-        newBook = scanner.nextLine();
+            System.out.println("Vad heter boken du vill lägga till i listan? ");
+            newBook = scanner.nextLine();
         } while (newBook.isBlank());
         do {
-        System.out.println("Vem har skrivit boken? ");
-        newAuthor = scanner.nextLine();
+
+            System.out.println("Vem har skrivit boken? ");
+            newAuthor = scanner.nextLine();
         } while (newAuthor.isBlank());
         do {
-        System.out.println("Skriv in lite information om boken. ");
-        newInfo = scanner.nextLine();
-        }while (newInfo.isBlank());
-        System.out.println("Du lade till:\nBok: " + newBook + "\nFörfattare: " + newAuthor + "\nInformation om boken: " + newInfo );
+            System.out.println("Skriv in lite information om boken. ");
+            newInfo = scanner.nextLine();
+        } while (newInfo.isBlank());
+        System.out.println("Du lade till:\nBok: " + newBook + "\nFörfattare: " + newAuthor + "\nInformation om boken: " + newInfo);
         Program.getBookProgram().books.add(new Book(newBook, newAuthor, newInfo, true));
     }
 
     public void removeBookFromList() {
-        String removeBook;
+        Boolean noMoreBooksToRemove;
         do {
-        System.out.println("Vilken bok vill du ta bort? \n");
-        Program.getBookProgram().showAllBookList();
-        removeBook = scanner.nextLine();
-        }while (removeBook.equals(""));
-        System.out.println("Du tog bort: " + removeBook + " från listan");
-        Program.getBookProgram().books.remove(removeBook);
+            Program.getBookProgram().showAllBookList();
+            System.out.println("Vilken nummer i listan vill du ta bort? \n");
+            String bookIndexToRemove = scanner.nextLine();
+            noMoreBooksToRemove = bookIndexToRemove.isBlank();
+
+
+            Integer bookIndex = Integer.parseInt(bookIndexToRemove);
+            Book bookToRemove = Program.getBookProgram().books.get(bookIndex-1);
+            Program.getBookProgram().books.remove(bookToRemove);
+            System.out.println("Du tog bort: " + bookToRemove.getTitle() + " från listan");
+        } while (!noMoreBooksToRemove);
     }
 }
