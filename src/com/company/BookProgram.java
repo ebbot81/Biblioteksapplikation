@@ -28,23 +28,26 @@ public class BookProgram {
 
 
     public void headLines() {
-        System.out.print(String.format("\n%36s","TITEL"));
+        System.out.print(String.format("\n%36s", "TITEL"));
         System.out.print(String.format("%36s", "FÖRFATTARE"));
         System.out.print(String.format("%33s", "INFORMATION\n"));
-        System.out.println("                               **************************************************************************\n");
+        System.out.println("                               *************************************************************************\n");
     }
 
     public void headLinesAndStatus() {
-        System.out.print(String.format("\n%36s", "STATUS"));
-        System.out.print(String.format("%36s","TITEL"));
+        System.out.print(String.format("NUMMER"));
+        System.out.print(String.format("%31s", "STATUS"));
+        System.out.print(String.format("%36s", "TITEL"));
         System.out.print(String.format("%36s", "FÖRFATTARE"));
         System.out.print(String.format("%33s", "INFORMATION\n"));
-        System.out.println("                              **************************************************************************************************************\n");
+        System.out.print("*********************************************************************************************************************************************\n");
     }
 
     public void showAllBookList() {
-        for (Book book : books) {
-            System.out.println(showAllBookInformationAndAvailability(book));
+        for (int i = 1; i <= books.size(); i++)
+        {
+            Book currentBook = books.get(i-1);
+            System.out.print(showAllBookInformationAndAvailability(currentBook)+i);
         }
     }
 
@@ -59,7 +62,7 @@ public class BookProgram {
     public void showBookListIfNotAvailable() {
         for (Book book : books) {
             if (book.isAvailability() == false) {
-                System.out.println(showAllBookInformationAndAvailability(book));
+                System.out.print(showAllBookInformationAndAvailability(book));
             }
         }
     }
@@ -72,7 +75,7 @@ public class BookProgram {
 
 
     public String showAllBookInformation(Book book) {
-        return String.format("                               %-30s %-30s %-30s\n ", book.getTitle(), book.getAuthor(), book.getInformation());
+        return String.format("                                %-30s %-30s %-30s\n ", book.getTitle(), book.getAuthor(), book.getInformation());
     }
 
     public String showAllBookInformationAndAvailability(Book book) {
@@ -80,7 +83,6 @@ public class BookProgram {
             System.out.print("                              Tillgänglig");
         } else System.out.print("                              Utlånad    ");
         return String.format("                          %-30s %-30s %-40s\n\n", book.getTitle(), book.getAuthor(), book.getInformation());
-
     }
 
     public Book searchByTitleOrAuthorIfTrue(String welcomeMessage, String messageIfFail, String bookNotAvailable) {
