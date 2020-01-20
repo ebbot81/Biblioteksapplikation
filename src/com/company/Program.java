@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Scanner;
 
 public class Program implements Serializable {
@@ -21,34 +20,24 @@ public class Program implements Serializable {
 
 
     public Program() {
+    /*    currentUser = new Customer("Admin", "123");
         customers.add(new Customer("Tobbe", "1234"));
         customers.add(new Customer("Hassan", "4321"));
-        customers.add(new Customer("Erik", "1111"));
-        librarianProgram.showUsers(customers);
-        librarianProgram.showUserByName(customers, "Välkommen, skriv in namnet på användaren du söker", "Systemet hittade flera users på din sökning, vänligen specificera", "Din sökning hittades inte", "Listan är tom");
-        //currentUser = new Customer("Hassan", "1234");
-        //fileSaveFiles();
-   /*     System.out.println(customers.size());
-        System.out.println();
-        addCustomer();
-        System.out.println();
-        System.out.println(customers.size());
-        SaveAndLoadFile.saveObject(customers.get(0).getName() + ".ser", customers.get(0));
-        Customer hassan = (Customer) SaveAndLoadFile.loadObject(customers.get(0).getName() + ".ser");
-        System.out.println(hassan.getName()+ hassan.getPassword());
-        login();*/
-   //start();
+        customers.add(new Customer("Pelle", "1111"));
+        customers.add(new Customer("Stina", "1111"));
+        customers.add(new Customer("Karin", "1111"));
+        customers.add(new Customer("Marie", "1111"));
+        customers.get(0).addBook(new Book("Pulp Fiction", "Quentin Tarrantino", "En svinbra bok", true));
+        customers.get(0).addBook(new Book("Sveket", "Quentin Tarrantino", "En svinbra bok", true));
+        customers.get(2).addBook(new Book("I Robot", "Quentin Tarrantino", "En svinbra bok", true));
+        customers.get(3).addBook(new Book("Braveheart", "Quentin Tarrantino", "En svinbra bok", true));
+        customers.get(4).addBook(new Book("Fredagen den 13", "Quentin Tarrantino", "En svinbra bok", true));
+        customers.get(5).addBook(new Book("Heat", "Quentin Tarrantino", "En svinbra bok", true));
+    //    librarianProgram.showUserNameAndOrBooks(customers, true);
+      //  librarianProgram.showUserNameAndOrBooks(customers, false);
+      //  librarianProgram.showUserByName( customers, "word", "fail", "not", "fett fel");
 
-   /*     System.out.println(books.size());
-        bookProgram.showAllBookInformationWithOutAvailability(books);
-        System.out.println();
-        sortByTitle();
-        bookProgram.showAllBookInformationWithOutAvailability(books);
-        System.out.println();
-        sortByAuthor();
-        bookProgram.showAllBookInformationWithOutAvailability(books);
-        System.out.println();
-*/
+        fileSaveFiles();*/
 
     }
 
@@ -206,7 +195,7 @@ public class Program implements Serializable {
     public void start() {
         int chooseMenu;
         do {
-            System.out.println("\nVILKEN MENY VILL DU BESÖKA?");
+            System.out.println("\nVÄLKOMMEN TILL BIBLIOTEKSAPPEN");
             System.out.println("-----------------------------");
             System.out.println("[1] LOGGA IN SOM KUND");
             System.out.println("[2] LOGGA IN SOM BIBLIOTEKARIE");
@@ -357,20 +346,23 @@ public class Program implements Serializable {
                 case 5:
                     System.out.println("HÄR KAN DU TA BORT BÖCKER: ");
                     System.out.println("------------------------\n ");
+                    bookProgram.showAllBookList();
                     librarianProgram.removeBookFromList();
                     break;
                 case 6:
                     System.out.println("HÄR KAN DU SE ALLA ANVÄNDARE SOM FINNS I SYSTEMET: ");
                     System.out.println("------------------------------------------------\n ");
-                    librarianProgram.showUsers(customers);
+                    librarianProgram.showUserNameAndOrBooks(customers, false);
                     break;
                 case 7:
                     System.out.println("HÄR KAN DU SÖKA PÅ EN SPECIFIK ANVÄNDARES NAMN:");
                     System.out.println("--------------------------------------------\n ");
+                    librarianProgram.showUserByName(customers, "Välkommen, skriv in namnet på användaren du söker", "Systemet hittade flera users på din sökning, vänligen specificera", "Din sökning hittades inte", "Listan är tom");
                     break;
                 case 8:
                     System.out.println("HÄR KAN DU SE VILKA BÖCKER ANVÄNDARNA HAR LÅNAT: ");
                     System.out.println("----------------------------------------------\n ");
+                    librarianProgram.showUserNameAndOrBooks(customers, true);
                     break;
                 case 9:
                     start();

@@ -8,10 +8,18 @@ public class LibrarianProgram {
     Scanner scanner = new Scanner(System.in);
     private ArrayList<String> books = new ArrayList<>();
 
-    public void showUsers(ArrayList<User> userList) {
+    public void showUserNameAndOrBooks(ArrayList<User> userList, boolean showUserBooksOrNot) {
         if (userList.size() > 0) {
             for (User user : userList) {
+                if (showUserBooksOrNot) {
+                    if (user.getBooks().size() > 0) {
                 System.out.println(user.getName());
+                    Program.getBookProgram().showAllBookInformationWithOutAvailability(user.getBooks());
+                    }
+                }
+                else {
+                    System.out.println(user.getName());
+                }
             }
         }
     }
@@ -38,15 +46,15 @@ public class LibrarianProgram {
     }
 
     public void removeBookFromList() {
-        Program.getBookProgram().books.remove( Program.getBookProgram().removeBooksFromLibrary(Program.getCurrentUser().getBooks(), "Vilken bok vill du ta bort?", "Din sökning gav flera resultat", "Din sökning gav inget resultat", "listan är tom"));
+        Program.getBookProgram().books.remove( Program.getBookProgram().removeBooksFromLibrary(Program.getBookProgram().books, "Vilken bok vill du ta bort?", "Din sökning gav flera resultat", "Din sökning gav inget resultat", "listan är tom"));
     }
 
-    public void showUserByName(ArrayList<User> bookListToReturnFrom, String msgWelcome, String msgRefineSearch, String msgIfFail, String msgIfEmptyList) {
+    public void showUserByName(ArrayList<User> userListToReturnFrom, String msgWelcome, String msgRefineSearch, String msgIfFail, String msgIfEmptyList) {
         String tempMsgRefineSearch = msgRefineSearch;
         String tempMsgIfFail = msgIfFail;
         ArrayList<User> sameSearchUsers = new ArrayList<>();
         String userInput = "";
-        if (bookListToReturnFrom.size() > 0) {
+        if (userListToReturnFrom.size() > 0) {
             System.out.println();
             System.out.println(msgWelcome);
             do {
@@ -54,18 +62,19 @@ public class LibrarianProgram {
                     msgIfFail = tempMsgIfFail;
                     eraseUserList(sameSearchUsers);
                     userInput = scanner.nextLine();
-                    for (int i = 0; i < bookListToReturnFrom.size(); i++) {
-                        if (bookListToReturnFrom.get(i).getName().toLowerCase().contains(userInput.toLowerCase())) {
-                            sameSearchUsers.add(bookListToReturnFrom.get(i));
+                    for (int i = 0; i < userListToReturnFrom.size(); i++) {
+                        if (userListToReturnFrom.get(i).getName().toLowerCase().contains(userInput.toLowerCase())) {
+                            sameSearchUsers.add(userListToReturnFrom.get(i));
                         }
                     }
-                    if(sameSearchUsers.size()>0){
+                    if(sameSearchUsers.size()>1){
                         msgIfFail = tempMsgRefineSearch;
-                        showUsers(sameSearchUsers);
+                        showUserNameAndOrBooks(sameSearchUsers, false);
 
                     }
                     if (sameSearchUsers.size() == 1) {
-                        System.out.println(sameSearchUsers.get(0));
+                        System.out.println(sameSearchUsers.get(0).getName());
+                        return;
                         //return sameSearchUsers.get(0);
                     }
                     System.out.println( msgIfFail);
