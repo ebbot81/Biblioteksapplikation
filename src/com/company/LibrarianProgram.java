@@ -8,6 +8,14 @@ public class LibrarianProgram {
     Scanner scanner = new Scanner(System.in);
     private ArrayList<String> books = new ArrayList<>();
 
+    public void showUsers(ArrayList<User> userList) {
+        if (userList.size() > 0) {
+            for (User user : userList) {
+                System.out.println(user.getName());
+            }
+        }
+    }
+
     public void addBookToList() {
         String newBook;
         String newAuthor;
@@ -30,18 +38,50 @@ public class LibrarianProgram {
     }
 
     public void removeBookFromList() {
-        Boolean noMoreBooksToRemove;
-        do {
-            Program.getBookProgram().showAllBookList();
-            System.out.println("Vilken nummer i listan vill du ta bort? \n");
-            String bookIndexToRemove = scanner.nextLine();
-            noMoreBooksToRemove = bookIndexToRemove.isBlank();
+        Program.getBookProgram().books.remove( Program.getBookProgram().removeBooksFromLibrary(Program.getCurrentUser().getBooks(), "Vilken bok vill du ta bort?", "Din sökning gav flera resultat", "Din sökning gav inget resultat", "listan är tom"));
+    }
 
+    public void showUserByName(ArrayList<User> bookListToReturnFrom, String msgWelcome, String msgRefineSearch, String msgIfFail, String msgIfEmptyList) {
+        String tempMsgRefineSearch = msgRefineSearch;
+        String tempMsgIfFail = msgIfFail;
+        ArrayList<User> sameSearchUsers = new ArrayList<>();
+        String userInput = "";
+        if (bookListToReturnFrom.size() > 0) {
+            System.out.println();
+            System.out.println(msgWelcome);
+            do {
+                do {
+                    msgIfFail = tempMsgIfFail;
+                    eraseUserList(sameSearchUsers);
+                    userInput = scanner.nextLine();
+                    for (int i = 0; i < bookListToReturnFrom.size(); i++) {
+                        if (bookListToReturnFrom.get(i).getName().toLowerCase().contains(userInput.toLowerCase())) {
+                            sameSearchUsers.add(bookListToReturnFrom.get(i));
+                        }
+                    }
+                    if(sameSearchUsers.size()>0){
+                        msgIfFail = tempMsgRefineSearch;
+                        showUsers(sameSearchUsers);
 
-            Integer bookIndex = Integer.parseInt(bookIndexToRemove);
-            Book bookToRemove = Program.getBookProgram().books.get(bookIndex-1);
-            Program.getBookProgram().books.remove(bookToRemove);
-            System.out.println("Du tog bort: " + bookToRemove.getTitle() + " från listan");
-        } while (!noMoreBooksToRemove);
+                    }
+                    if (sameSearchUsers.size() == 1) {
+                        System.out.println(sameSearchUsers.get(0));
+                        //return sameSearchUsers.get(0);
+                    }
+                    System.out.println( msgIfFail);
+                } while (true);
+            } while (true);
+        }
+        System.out.println(msgIfEmptyList);
+        //return null;
+    }
+
+    public void eraseUserList(ArrayList<User> userListToEmpty) {
+        if (userListToEmpty.size() > 0) {
+            do {
+                userListToEmpty.remove(userListToEmpty.get(0));
+            } while (userListToEmpty.size() > 0);
+            return;
+        }
     }
 }

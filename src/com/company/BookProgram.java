@@ -1,16 +1,29 @@
 package com.company;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-public class BookProgram {
+public class BookProgram  {
 
     ArrayList<Book> books = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
 
     public BookProgram() {
         //   showAllBookList();
-        addBooks();
+        addBooksFromFile(books,"books.txt");
+    }
+
+    private void addBooksFromFile(ArrayList<Book> listOfBooksToAddBooksTo, String fileName) {
+        List<String> lines = SaveAndLoadFile.readAllLines(fileName);
+        for (String str : lines) {
+            String[] parts = str.split(",");
+            for (int i = 0; i < str.length(); i++) {
+                listOfBooksToAddBooksTo.add(new Book(parts[0], parts[1], parts[2], true));
+                break;
+            }
+        }
     }
 
     private void addBooks() {
@@ -35,19 +48,17 @@ public class BookProgram {
     }
 
     public void headLinesAndStatus() {
-        System.out.print(String.format("NUMMER"));
-        System.out.print(String.format("%31s", "STATUS"));
+        System.out.print(String.format("%36s", "STATUS"));
         System.out.print(String.format("%36s", "TITEL"));
         System.out.print(String.format("%36s", "FÖRFATTARE"));
         System.out.print(String.format("%33s", "INFORMATION\n"));
-        System.out.print("*********************************************************************************************************************************************\n");
+        System.out.print("                              **************************************************************************************************************\n");
     }
 
     public void showAllBookList() {
-        for (int i = 1; i <= books.size(); i++)
+        for (Book book : books)
         {
-            Book currentBook = books.get(i-1);
-            System.out.print(showAllBookInformationAndAvailability(currentBook)+i);
+            System.out.print(showAllBookInformationAndAvailability(book));
         }
     }
 
@@ -153,6 +164,56 @@ public class BookProgram {
                 System.out.println(messageIfFail);
         }
     }
+
+    public Book removeBooksFromLibrary(ArrayList<Book> bookListToReturnFrom, String msgWelcome, String msgRefineSearch, String msgIfFail, String msgIfEmptyList) {
+        String tempMsgRefineSearch = msgRefineSearch;
+        String tempMsgIfFail = msgIfFail;
+        ArrayList<Book> sameSearchBooks = new ArrayList<>();
+        String userInput = "";
+        if (bookListToReturnFrom.size() > 0) {
+            System.out.println();
+            System.out.println(msgWelcome);
+            do {
+                do {
+                    msgIfFail = tempMsgIfFail;
+                    eraseBookList(sameSearchBooks);
+                    userInput = scanner.nextLine();
+                    for (int i = 0; i < bookListToReturnFrom.size(); i++) {
+                        if (bookListToReturnFrom.get(i).getTitle().toLowerCase().contains(userInput.toLowerCase()) ||
+                                bookListToReturnFrom.get(i).getAuthor().toLowerCase().contains(userInput.toLowerCase())) {
+                            sameSearchBooks.add(bookListToReturnFrom.get(i));
+                        }
+                    }
+                    if(sameSearchBooks.size()>0){
+                        msgIfFail = tempMsgRefineSearch;
+                        showAllBookInformationWithOutAvailability(sameSearchBooks);
+                    }
+                    if (sameSearchBooks.size() == 1) {
+                        //bookListToRemoveFrom.remove(sameSearchBooks.get(0));
+                        if (sameSearchBooks.get(0).isAvailability() == true) {
+                        sameSearchBooks.get(0).setAvailability(false);
+                        } else {
+                            sameSearchBooks.get(0).setAvailability(true);
+                        }
+                        return sameSearchBooks.get(0);
+                    }
+                    System.out.println( msgIfFail);
+                } while (true);
+            } while (true);
+        }
+        System.out.println(msgIfEmptyList);
+        return null;
+    }
+
+    public void eraseBookList(ArrayList<Book> bookListToEmpty) {
+        if (bookListToEmpty.size() > 0) {
+            do {
+                bookListToEmpty.remove(bookListToEmpty.get(0));
+            } while (bookListToEmpty.size() > 0);
+            return;
+        }
+    }
+
 
 }
 

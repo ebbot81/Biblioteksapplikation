@@ -54,16 +54,20 @@ public class CustomerProgram {
         } while (true);
     }
 
- public void borrowBook(Customer customerListToAddBookTo) {
+ public void borrowBook(User customerListToAddBookTo) {
+     customerListToAddBookTo.addBook( Program.getBookProgram().removeBooksFromLibrary(Program.getBookProgram().books, "Vilken bok vill du ta bort?", "Din sökning gav flera resultat", "Din sökning gav inget resultat", "listan är tom"));
+/*
      Book selectedBook =  Program.getBookProgram().searchByTitleOrAuthorIfTrue("Vilken bok vill du låna?", "Boken du sökte finns inte, försök igen med exakt boktitel eller författarnamn", "Tyvärr är boken du sökte utlånad för tillfället");
      if (selectedBook != null) {
          customerListToAddBookTo.addBook(selectedBook);
          System.out.println("Vad kul! Du lånade boken: " + selectedBook.getTitle() + ". Trevlig läsning :)");
-     }
+     }*/
     }
 
-    public void returnBook(Customer customerListToRemoveBookFrom) {
-        customerListToRemoveBookFrom.removeBook( Program.getBookProgram().searchByTitleOrAuthorIfFalse("Vilken bok vill du lämna tillbaka?", "Du kan inte lämna tillbaka en bok du inte har lånat"));
+    public void returnBook(User customerListToRemoveBookFrom) {
+        customerListToRemoveBookFrom.removeBook( Program.getBookProgram().removeBooksFromLibrary(Program.getBookProgram().books, "Vilken bok vill du ta bort?", "Din sökning gav flera resultat", "Din sökning gav inget resultat", "listan är tom"));
+
+//        customerListToRemoveBookFrom.removeBook( Program.getBookProgram().searchByTitleOrAuthorIfFalse("Vilken bok vill du lämna tillbaka?", "Du kan inte lämna tillbaka en bok du inte har lånat"));
     }
 
  public void showMyBorrowedBooks(ArrayList<Book> listOfBooksToPrint) {
