@@ -1,19 +1,33 @@
 package com.company;
 
+import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-public class Program {
+public class Program implements Serializable {
     public transient Scanner scanner = new Scanner(System.in);
     private static BookProgram bookProgram = new BookProgram();
+    private static ArrayList<Book> books = bookProgram.books;
     private static CustomerProgram customerProgram = new CustomerProgram();
     private static LibrarianProgram librarianProgram = new LibrarianProgram();
-    private static ArrayList<Customer> customers = new ArrayList<>();
-    private static ArrayList<Librarian> librarians = new ArrayList<>();
-    private Customer currentCustomer = new Customer("hassan", "1123");
+ //   private static ArrayList<Customer> customers = new ArrayList<>();
+ //   private static ArrayList<Librarian> librarians = new ArrayList<>();
+    private static User currentUser = null;
+    private static ArrayList<User> customers = new ArrayList<>();
+    private static ArrayList<User> librarians = new ArrayList<>();
+
 
     public Program() {
+        customers.add(new Customer("Tobbe", "1234"));
+        customers.add(new Customer("Hassan", "4321"));
+        customers.add(new Customer("Erik", "1111"));
+        librarianProgram.showUsers(customers);
+        librarianProgram.showUserByName(customers, "Välkommen, skriv in namnet på användaren du söker", "Systemet hittade flera users på din sökning, vänligen specificera", "Din sökning hittades inte", "Listan är tom");
+        //currentUser = new Customer("Hassan", "1234");
+        //fileSaveFiles();
    /*     System.out.println(customers.size());
         System.out.println();
         addCustomer();
@@ -23,6 +37,147 @@ public class Program {
         Customer hassan = (Customer) SaveAndLoadFile.loadObject(customers.get(0).getName() + ".ser");
         System.out.println(hassan.getName()+ hassan.getPassword());
         login();*/
+   //start();
+
+   /*     System.out.println(books.size());
+        bookProgram.showAllBookInformationWithOutAvailability(books);
+        System.out.println();
+        sortByTitle();
+        bookProgram.showAllBookInformationWithOutAvailability(books);
+        System.out.println();
+        sortByAuthor();
+        bookProgram.showAllBookInformationWithOutAvailability(books);
+        System.out.println();
+*/
+
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////D
+    private void createAccount(boolean trueForCustomerFalseForLibrarian) {
+        String fileExt = "";
+        if (trueForCustomerFalseForLibrarian == true) {
+            fileExt = "_customer_";
+        } else {
+            fileExt = "_librarian_";
+        }
+        System.out.println();
+        System.out.println("Hej och välkommen!");
+        String userName = "";
+        String userPassword = "";
+        while(!userName.equals("1") || userPassword.equals("1")) {
+            do {
+                System.out.println("Vänligen ange ett användarnamn. Använd minst 3 tecken.");
+                userName = scanner.nextLine();
+                if( userName.equals("9")){start();}
+                while (checkIfUserAlreadyExists(fileExt + userName) == true) {
+                    System.out.println("Användarnamnet finns redan!");
+                    userName = scanner.nextLine();
+                    if( userName.equals("9")){start();}
+                }
+            } while (userName.isBlank() || userName.length() < 3);
+            System.out.println("Välkommen " + userName + "! Ange ett lösenord");
+            userPassword = scanner.nextLine();
+            if( userPassword.equals("9")){start();}
+            while (userPassword.isBlank() || userPassword.length() < 3) {
+                System.out.println("Försök igen och använd minst 3 tecken.");
+                userPassword = scanner.nextLine();
+                if( userPassword.equals("9")){start();}
+            }
+            if (trueForCustomerFalseForLibrarian == true) {
+                Customer customer = new Customer(userName, userPassword);
+                customers.add( customer );
+                currentUser = customer;
+                SaveAndLoadFile.saveObject(fileExt + userName + ".ser", checkUserByName(customers, userName));
+                //fileLoadSavedObject(fileExt + userName + ".ser");
+            } else {
+                Librarian librarian = new Librarian(userName, userPassword);
+                librarians.add( librarian );
+                currentUser = librarian;
+                SaveAndLoadFile.saveObject(fileExt + userName + ".ser", checkUserByName(librarians, userName));
+                //fileLoadSavedObject(fileExt + userName + ".ser");
+            }
+            fileLoadFiles();
+            return;
+        }
+    }
+    private void logIn(boolean trueForCustomerFalseForLibrarian) {
+        boolean createAccountForCustomer = trueForCustomerFalseForLibrarian;
+        String fileExt = "";
+        if (createAccountForCustomer == true) {
+            fileExt = "_customer_";
+        } else {
+            fileExt = "_librarian_";
+        }
+        File file = new File("./");
+        String[] files = file.list();
+        System.out.println("Vänligen fyll i ditt användarnamn eller tryck [9] för att återvända till startmenyn.");
+        String userName = scanner.nextLine();
+        if( userName.equals("9")){start();}
+        do {
+            for (String str : files) {
+                if (str.equalsIgnoreCase(fileExt + userName + ".ser")) {
+                    currentUser = (User) SaveAndLoadFile.loadObject(fileExt + userName + ".ser");
+                    fileLoadFiles();
+                    System.out.println("Ange ditt lösenord?");
+                    String userPass = scanner.nextLine();
+                    if( userPass.equals("9")){start();}
+                    while (!currentUser.getPassword().equals(userPass)) {
+                        System.out.println("Lösenordet stämmer inte. Vänligen försök igen eller tryck [9] för att återvända till startmenyn.");
+                        userPass = scanner.nextLine();
+                        if( userPass.equals("9")){start();}
+                    }
+                    return;
+                }
+            }
+            System.out.println("Användarnamnet finns ej registrerat. Försök igen eller tryck [9] för att återvända till startmenyn.");
+            userName = scanner.nextLine();
+            if( userName.equals("9")){start();}
+        } while (true);
+    }
+    private boolean checkIfUserAlreadyExists(String userName) {
+        File file = new File("./");
+        String[] files = file.list();
+        for (String str : files) {
+            if (str.equalsIgnoreCase(userName + ".ser")) {
+                return true;
+            }
+        }
+        return false;
+    }
+    private User checkUserByName(ArrayList<User> userList, String nameOfUser) {
+        for (User user : userList) {
+            if (user.getName().equalsIgnoreCase(nameOfUser)) {
+                return user;
+            }
+        }
+        return null;
+    }
+    private void fileLoadFiles() {
+        customers = (ArrayList<User>) SaveAndLoadFile.loadObject("customers.ser");
+        librarians = (ArrayList<User>) SaveAndLoadFile.loadObject("librarians.ser");
+        books = (ArrayList<Book>) SaveAndLoadFile.loadObject("books.ser");
+    }
+    private void fileSaveFiles() {
+        if (currentUser instanceof Customer) {
+            SaveAndLoadFile.saveObject("_customer_" + currentUser.getName() + ".ser", currentUser);
+            SaveAndLoadFile.saveObject("books.ser", books);
+            SaveAndLoadFile.saveObject("customers.ser", customers);
+            SaveAndLoadFile.saveObject("librarians.ser", librarians);
+            return;
+        }
+        SaveAndLoadFile.saveObject("_librarian_" + currentUser.getName() + ".ser", currentUser);
+        SaveAndLoadFile.saveObject("books.ser", books);
+        SaveAndLoadFile.saveObject("customers.ser", customers);
+        SaveAndLoadFile.saveObject("librarians.ser", librarians);
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////D
+
+    private void sortByTitle() {
+        Collections.sort(books, new Sort.sortByTitle());
+    }
+
+    private void sortByAuthor() {
+        Collections.sort(books, new Sort.sortByAuthor());
     }
 
     private void addCustomer() {
@@ -53,34 +208,41 @@ public class Program {
         do {
             System.out.println("\nVILKEN MENY VILL DU BESÖKA?");
             System.out.println("-----------------------------");
-            System.out.println("[1] LOGGA IN");
-            System.out.println("[2] KUNDENS MENY");
-            System.out.println("[3] BIBLIOTEKARIENS MENY");
-            System.out.println("[4] AVSLUTA");
+            System.out.println("[1] LOGGA IN SOM KUND");
+            System.out.println("[2] LOGGA IN SOM BIBLIOTEKARIE");
+            System.out.println("[3] REGISTRERA DIG SOM KUND");
+            System.out.println("[4] REGISTRERA DIG SOM BIBLIOTEKARIE");
+            System.out.println("[5] AVSLUTA");
 
             do {
                 try {
                     chooseMenu = Integer.parseInt(scanner.nextLine());
-                    if (chooseMenu < 1 || chooseMenu > 4) {
+                    if (chooseMenu < 1 || chooseMenu > 5) {
                         throw new IndexOutOfBoundsException();
                     }
                     break;
                 } catch (Exception e) {
-                    System.out.println("Välj ett nummer mellan 1-4");
+                    System.out.println("Välj ett nummer mellan 1-5");
                 }
             } while (true);
 
             switch (chooseMenu) {
                 case 1:
-                    login();
-                    break;
-                case 2:
+                    logIn(true);
                     customerMenu();
                     break;
-                case 3:
+                case 2:
+                    logIn(false);
                     librarianMenu();
                     break;
+                case 3:
+                    createAccount(true);
+                    break;
                 case 4:
+                    createAccount(false);
+                    return;
+                case 5:
+                    start();
                     return;
                 default:
                     break;
@@ -96,22 +258,20 @@ public class Program {
             System.out.println("Vad vill du göra?\n");
             System.out.println("[1] SE ALLA BÖCKER SOM FINNS I APPEN");
             System.out.println("[2] SE STATUSEN PÅ BÖCKERNA SOM FINNS I APPEN");
-            System.out.println("[3] SÖKER DU NÅGON SPECIFIK BOKS INFO?, TRYCK HÄR");
-            System.out.println("[4] SÖKA PÅ BOKTITEL ELLER FÖRFATTARE");
-            System.out.println("[5] LÅNA EN BOK");
-            System.out.println("[6] SE VILKA BÖCKER DU LÅNAT");
-            System.out.println("[7] LÄMNA TILLBAKA EN BOK");
-            System.out.println("[8] AVSLUTA");
+            System.out.println("[3] LÅNA EN BOK");
+            System.out.println("[4] SE VILKA BÖCKER DU LÅNAT");
+            System.out.println("[5] LÄMNA TILLBAKA EN BOK");
+            System.out.println("[6] AVSLUTA");
 
             do {
                 try {
                     custMenu = Integer.parseInt(scanner.nextLine());
-                    if (custMenu < 1 || custMenu > 8) {
+                    if (custMenu < 1 || custMenu > 6) {
                         throw new IndexOutOfBoundsException();
                     }
                     break;
                 } catch (Exception e) {
-                    System.out.println("Välj ett nummer mellan 1-8");
+                    System.out.println("Välj ett nummer mellan 1-6");
                 }
             } while (true);
 
@@ -123,34 +283,23 @@ public class Program {
                 case 2:
                     bookProgram.headLinesAndStatus();
                     bookProgram.showAllBookList();
-
+               //     bookProgram.showAllBookInformationWithOutAvailability(bookProgram.books);
                     break;
                 case 3:
-                    System.out.println("HÄR KAN DU SÖKA PÅ EN SPECIFIK BOKS INFO : ");
-                    System.out.println("----------------------------------------\n ");
-                    //      System.out.println(bookProgram.showAllBookInformation());
+                    bookProgram.headLinesAndStatus();
+                    bookProgram.showAllBookList();
+                    customerProgram.borrowBook(currentUser);
                     break;
                 case 4:
-                    System.out.println("HÄR KAN DU SÖKA PÅ BOKTITEL ELLER FÖRFATTARE: ");
-                    System.out.println("-------------------------------------------\n ");
-                    bookProgram.searchByTitle("Vilken titel söker du?", "Tyvärr finns inte titeln du sökte, försök igen", "Tyvärr är boken utlånad för tillfället");
-                    bookProgram.searchByAuthor("Vilken författare söker du?", "Tyvärr finns inte författaren du sökte, försök igen");
+                    bookProgram.headLinesAndStatus();
+                    customerProgram.showMyBorrowedBooks(currentUser.getBooks());
                     break;
                 case 5:
                     bookProgram.headLinesAndStatus();
-                    bookProgram.showAllBookList();
-                    customerProgram.borrowBook(currentCustomer);
+                    customerProgram.showMyBorrowedBooks(currentUser.getBooks());
+                    customerProgram.returnBook(currentUser);
                     break;
                 case 6:
-                    bookProgram.headLinesAndStatus();
-                    customerProgram.showMyBorrowedBooks(currentCustomer.getBooks());
-                    break;
-                case 7:
-                    bookProgram.headLinesAndStatus();
-                    customerProgram.showMyBorrowedBooks(currentCustomer.getBooks());
-                    customerProgram.returnBook(currentCustomer);
-                    break;
-                case 8:
                     start();
                     return;
                 default:
@@ -173,18 +322,17 @@ public class Program {
             System.out.println("[6] SE EN LISTA PÅ ALLA ANVÄNDARE");
             System.out.println("[7] SÖKA PÅ SPECIFIK ANVÄNDARE");
             System.out.println("[8] SE EN LISTA PÅ ANVÄNDARNAS LÅNADE BÖCKER");
-            System.out.println("[9] LOGGA IN PÅ APPEN");
-            System.out.println("[10] AVSLUTA");
+            System.out.println("[9] AVSLUTA");
 
             do {
                 try {
                     libMenu = Integer.parseInt(scanner.nextLine());
-                    if (libMenu < 1 || libMenu > 10) {
+                    if (libMenu < 1 || libMenu > 9) {
                         throw new IndexOutOfBoundsException();
                     }
                     break;
                 } catch (Exception e) {
-                    System.out.println("Välj ett nummer mellan 1-10");
+                    System.out.println("Välj ett nummer mellan 1-9");
                 }
             } while (true);
 
@@ -214,6 +362,7 @@ public class Program {
                 case 6:
                     System.out.println("HÄR KAN DU SE ALLA ANVÄNDARE SOM FINNS I SYSTEMET: ");
                     System.out.println("------------------------------------------------\n ");
+                    librarianProgram.showUsers(customers);
                     break;
                 case 7:
                     System.out.println("HÄR KAN DU SÖKA PÅ EN SPECIFIK ANVÄNDARES NAMN:");
@@ -224,10 +373,6 @@ public class Program {
                     System.out.println("----------------------------------------------\n ");
                     break;
                 case 9:
-                    System.out.println("HÄR KAN DU LOGGA IN PÅ APPEN: ");
-                    System.out.println("---------------------------\n ");
-                    break;
-                case 10:
                     start();
                     return;
                 default:
@@ -242,7 +387,7 @@ public class Program {
             System.out.println("Skriv in ditt användarnamn: ");
             try {
                 String userName = scanner.nextLine();
-                currentCustomer = (Customer) SaveAndLoadFile.loadObject(userName + ".ser");
+                currentUser = (Customer) SaveAndLoadFile.loadObject(userName + ".ser");
             } catch (Exception e) {
                 System.out.println("Inkorrekt användarnamn");
             }
@@ -250,21 +395,10 @@ public class Program {
             do{
                 System.out.println("Skriv in lösenordet");
                 userPassword = scanner.nextLine();
-            }while (!currentCustomer.getPassword().equals(userPassword));
+            }while (!currentUser.getPassword().equals(userPassword));
             System.out.println("Korrekt inloggning");
             return;
         } while (true);
-    }
-
-    private void addBooksFromFile(ArrayList<Book> listOfBooksToAddBooksTo, String fileName) {
-        List<String> lines = SaveAndLoadFile.readAllLines(fileName);
-        for (String str : lines) {
-            String[] parts = str.split(",");
-            for (int i = 0; i < str.length(); i++) {
-                listOfBooksToAddBooksTo.add(new Book(parts[0], parts[1], parts[2], true));
-                break;
-            }
-        }
     }
 
     public static CustomerProgram getCustomerProgram() {
@@ -275,11 +409,15 @@ public class Program {
         return bookProgram;
     }
 
-    public static ArrayList<Customer> getCustomers() {
+    public static ArrayList<User> getCustomers() {
         return customers;
     }
 
-    public static ArrayList<Librarian> getLibrarians() {
+    public static ArrayList<User> getLibrarians() {
         return librarians;
+    }
+
+    public static User getCurrentUser() {
+        return currentUser;
     }
 }
