@@ -2,11 +2,15 @@ package com.company;
 
 import java.io.File;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Scanner;
 
 public class Program implements Serializable {
+    public static Program program;
     public transient Scanner scanner = new Scanner(System.in);
     private static BookProgram bookProgram = new BookProgram();
     private static ArrayList<Book> books = bookProgram.books;
@@ -17,29 +21,77 @@ public class Program implements Serializable {
     private static User currentUser = null;
     private static ArrayList<User> customers = new ArrayList<>();
     private static ArrayList<User> librarians = new ArrayList<>();
-
+    private Integer[] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 31, 31};
+    private LocalDate localDate = LocalDate.now();
+    private final int MAX_ALLOWED_BORROW_DAY = 8;
+    private int thisDay = localDate.getDayOfMonth();
+    private int thisMonth = localDate.getMonthValue();
+    private int thisYear = localDate.getYear();
+    private int returnDay = localDate.getDayOfMonth();
+    private int returnMonth = localDate.getMonthValue();
+    private int returnYear = localDate.getYear();
 
     public Program() {
-    /*    currentUser = new Customer("Admin", "123");
-        customers.add(new Customer("Tobbe", "1234"));
-        customers.add(new Customer("Hassan", "4321"));
-        customers.add(new Customer("Pelle", "1111"));
-        customers.add(new Customer("Stina", "1111"));
-        customers.add(new Customer("Karin", "1111"));
-        customers.add(new Customer("Marie", "1111"));
-        customers.get(0).addBook(new Book("Pulp Fiction", "Quentin Tarrantino", "En svinbra bok", true));
-        customers.get(0).addBook(new Book("Sveket", "Quentin Tarrantino", "En svinbra bok", true));
-        customers.get(2).addBook(new Book("I Robot", "Quentin Tarrantino", "En svinbra bok", true));
-        customers.get(3).addBook(new Book("Braveheart", "Quentin Tarrantino", "En svinbra bok", true));
-        customers.get(4).addBook(new Book("Fredagen den 13", "Quentin Tarrantino", "En svinbra bok", true));
-        customers.get(5).addBook(new Book("Heat", "Quentin Tarrantino", "En svinbra bok", true));
-    //    librarianProgram.showUserNameAndOrBooks(customers, true);
-      //  librarianProgram.showUserNameAndOrBooks(customers, false);
-      //  librarianProgram.showUserByName( customers, "word", "fail", "not", "fett fel");
 
-        fileSaveFiles();*/
+        int restDay = 0;
+        int remainDay = 0;
+        int totalDay = thisDay + MAX_ALLOWED_BORROW_DAY;
+        int rounds = 0;
+        int currentDaysOfMonth = monthDays[thisMonth - 1];
 
-    }
+        int time = thisDay + 14;
+        int next = 0;
+
+        while (time > 0) {
+            int i = 0;
+            next++;
+            time -= 1;
+            if (next >= monthDays[thisMonth - i]) {
+                returnDay = time;
+                i++;
+                next = 0;
+                returnMonth++;
+                if (returnMonth > monthDays.length) {
+                    returnYear++;
+                }
+            }
+        }
+            System.out.println(returnDay);
+            System.out.println(returnMonth);
+            System.out.println(returnYear);
+        }
+
+/*
+        String lastDayToReturnBook;  // Start lastDayToReturnBook
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, 14);  // number of days to add
+        lastDayToReturnBook = sdf.format(calendar.getTime());  // dt is now the new lastDayToReturnBook
+        System.out.println(lastDayToReturnBook);
+
+        customers.add(new Customer("Hassan", "1111"));
+        customers.add(new Customer("Tobbe", "1111"));
+        customers.add(new Customer("Viktor", "1111"));
+        customers.add(new Customer("Johan", "1111"));
+
+        System.out.println(customers.get(0).getBorrowDay());
+
+        System.out.println(localDate);
+        if (localDate.getDayOfMonth() == Integer.parseInt(lastDayToReturnBook)) {
+            System.out.println("samma dag");
+
+        }else if (localDate.getDayOfMonth() <= Integer.parseInt(lastDayToReturnBook)) {
+            System.out.println("Du har: " + lastDayToReturnBook + "dagar kvar");
+        }else {
+            System.out.println("Du är sen med återlämningen av boken" + lastDayToReturnBook);
+        }*/
+        /*}
+        Calendar c = Calendar.getInstance();
+        c.add( Calendar.DATE, 370);  // number of days to add
+        System.out.println(returnDay);
+        System.out.println(returnMonth);
+        System.out.println(c.getTime());
+   */
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////D
     private void createAccount(boolean trueForCustomerFalseForLibrarian) {
