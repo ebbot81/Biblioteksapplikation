@@ -8,6 +8,7 @@ public class User implements Serializable {
     private String name;
     private String password;
     private ArrayList<Book> books = new ArrayList<>();
+    private int borrowDay;
 
 
     public User(String name, String password) {
@@ -22,6 +23,7 @@ public class User implements Serializable {
     public String getPassword() {
         return password;
     }
+
     public void addBook(Book book) {
         books.add(book);
     }
@@ -32,5 +34,9 @@ public class User implements Serializable {
 
     public ArrayList<Book>getBooks() {
         return books;
+    }
+
+    public int getBorrowDay() {
+        return borrowDay;
     }
 }

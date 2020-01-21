@@ -3,11 +3,14 @@ package com.company;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class CustomerProgram {
 
     ArrayList<Customer> customers = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
+    Timer timer = new Timer();
 
  /*   public CustomerProgram() {
         System.out.println(myBorrowedBooks.size());
@@ -55,7 +58,14 @@ public class CustomerProgram {
     }
 
  public void borrowBook(User customerListToAddBookTo) {
-     customerListToAddBookTo.addBook( Program.getBookProgram().removeBooksFromLibrary(Program.getBookProgram().books, "Vilken bok vill du ta bort?", "Din sökning gav flera resultat", "Din sökning gav inget resultat", "listan är tom"));
+     customerListToAddBookTo.addBook( Program.getBookProgram().removeBooksFromLibrary(Program.getBookProgram().books,
+             "Vänligen fyll i vilken bok eller författare du vill låna",
+             "Din sökning gav flera resultat",
+             "Din sökning gav inget resultat",
+             "listan är tom"));
+     System.out.println("Vänligen fyll i om du vill låna fler böcker eller tryck [9] för att återvända till startmenyn.");
+     String bookOrAuthorName = scanner.nextLine();
+     if( bookOrAuthorName.equals("9")){ return; }
 /*
      Book selectedBook =  Program.getBookProgram().searchByTitleOrAuthorIfTrue("Vilken bok vill du låna?", "Boken du sökte finns inte, försök igen med exakt boktitel eller författarnamn", "Tyvärr är boken du sökte utlånad för tillfället");
      if (selectedBook != null) {

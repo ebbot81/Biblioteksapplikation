@@ -41,18 +41,18 @@ public class BookProgram  {
 
 
     public void headLines() {
-        System.out.print(String.format("\n%36s", "TITEL"));
-        System.out.print(String.format("%36s", "FÖRFATTARE"));
+        System.out.print(String.format("\n%37s", "TITEL"));
+        System.out.print(String.format("%37s", "FÖRFATTARE"));
         System.out.print(String.format("%33s", "INFORMATION\n"));
-        System.out.println("                               *************************************************************************\n");
+        System.out.println("                                **************************************************************************\n");
     }
 
     public void headLinesAndStatus() {
         System.out.print(String.format("%36s", "STATUS"));
         System.out.print(String.format("%36s", "TITEL"));
-        System.out.print(String.format("%36s", "FÖRFATTARE"));
+        System.out.print(String.format("%37s", "FÖRFATTARE"));
         System.out.print(String.format("%33s", "INFORMATION\n"));
-        System.out.print("                              **************************************************************************************************************\n");
+        System.out.print("                              ***************************************************************************************************************\n");
     }
 
     public void showAllBookList() {
@@ -81,9 +81,8 @@ public class BookProgram  {
     public void showAllBookInformationWithOutAvailability(ArrayList<Book> listOfBooksToShow) {
         for (Book book : listOfBooksToShow) {
             System.out.println(showAllBookInformation(book));
-        }
+            }
     }
-
 
     public String showAllBookInformation(Book book) {
         return String.format("                                %-30s %-30s %-30s\n ", book.getTitle(), book.getAuthor(), book.getInformation());
@@ -173,6 +172,8 @@ public class BookProgram  {
         if (bookListToReturnFrom.size() > 0) {
             System.out.println();
             System.out.println(msgWelcome);
+
+
             do {
                 do {
                     msgIfFail = tempMsgIfFail;
@@ -184,6 +185,7 @@ public class BookProgram  {
                             sameSearchBooks.add(bookListToReturnFrom.get(i));
                         }
                     }
+                        headLines();
                     if(sameSearchBooks.size()>0){
                         msgIfFail = tempMsgRefineSearch;
                         showAllBookInformationWithOutAvailability(sameSearchBooks);
