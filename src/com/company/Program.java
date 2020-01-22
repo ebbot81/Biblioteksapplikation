@@ -33,6 +33,9 @@ public class Program implements Serializable {
 
     public Program() {
 
+    }
+
+/*
         int restDay = 0;
         int remainDay = 0;
         int totalDay = thisDay + MAX_ALLOWED_BORROW_DAY;
@@ -61,6 +64,7 @@ public class Program implements Serializable {
             System.out.println(returnYear);
         }
 
+*/
 /*
         String lastDayToReturnBook;  // Start lastDayToReturnBook
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -391,13 +395,9 @@ public class Program implements Serializable {
                     bookProgram.showBookListIfNotAvailable();
                     break;
                 case 4:
-                    System.out.println("HÄR KAN DU LÄGGA TILL NYA BÖCKER: ");
-                    System.out.println("-------------------------------\n ");
                     librarianProgram.addBookToList();
                     break;
                 case 5:
-                    System.out.println("HÄR KAN DU TA BORT BÖCKER: ");
-                    System.out.println("------------------------\n ");
                     bookProgram.showAllBookList();
                     librarianProgram.removeBookFromList();
                     break;
@@ -407,8 +407,6 @@ public class Program implements Serializable {
                     librarianProgram.showUserNameAndOrBooks(customers, false);
                     break;
                 case 7:
-                    System.out.println("HÄR KAN DU SÖKA PÅ EN SPECIFIK ANVÄNDARES NAMN:");
-                    System.out.println("--------------------------------------------\n ");
                     librarianProgram.showUserByName(customers, "Välkommen, skriv in namnet på användaren du söker", "Systemet hittade flera users på din sökning, vänligen specificera", "Din sökning hittades inte", "Listan är tom");
                     break;
                 case 8:
