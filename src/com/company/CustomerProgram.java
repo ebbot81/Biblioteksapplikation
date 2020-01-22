@@ -27,7 +27,7 @@ public class CustomerProgram {
     }
     private Customer findCustomer(String name) {
         for (Customer customer : customers) {
-            if (customer.getName().equals(name)) {
+            if (customer. getName().equals(name)) {
                 return customer;
             }
         }
@@ -63,9 +63,9 @@ public class CustomerProgram {
              "Din sökning gav flera resultat",
              "Din sökning gav inget resultat",
              "listan är tom"));
-     System.out.println("Vänligen fyll i om du vill låna fler böcker eller tryck [9] för att återvända till startmenyn.");
-     String bookOrAuthorName = scanner.nextLine();
-     if( bookOrAuthorName.equals("9")){ return; }
+     return;
+ //    String bookOrAuthorName = scanner.nextLine();
+ //    if( bookOrAuthorName.equals("9")){ return; }
 /*
      Book selectedBook =  Program.getBookProgram().searchByTitleOrAuthorIfTrue("Vilken bok vill du låna?", "Boken du sökte finns inte, försök igen med exakt boktitel eller författarnamn", "Tyvärr är boken du sökte utlånad för tillfället");
      if (selectedBook != null) {
@@ -75,7 +75,7 @@ public class CustomerProgram {
     }
 
     public void returnBook(User customerListToRemoveBookFrom) {
-        customerListToRemoveBookFrom.removeBook( Program.getBookProgram().removeBooksFromLibrary(Program.getBookProgram().books, "Vilken bok vill du ta bort?", "Din sökning gav flera resultat", "Din sökning gav inget resultat", "listan är tom"));
+        customerListToRemoveBookFrom.removeBook( Program.getBookProgram().removeBooksFromLibrary(Program.getBookProgram().books, "Vilken bok vill du lämna tillbaka?", "Din sökning gav flera resultat", "Din sökning gav inget resultat", "listan är tom"));
 
 //        customerListToRemoveBookFrom.removeBook( Program.getBookProgram().searchByTitleOrAuthorIfFalse("Vilken bok vill du lämna tillbaka?", "Du kan inte lämna tillbaka en bok du inte har lånat"));
     }
