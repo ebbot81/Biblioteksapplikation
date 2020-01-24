@@ -3,14 +3,12 @@ package com.company;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class CustomerProgram {
 
     ArrayList<Customer> customers = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
-    Timer timer = new Timer();
+    private final int MAX_AMOUNT_OF_DAYS_TO_BORROW_BOOK = 7;
 
  /*   public CustomerProgram() {
         System.out.println(myBorrowedBooks.size());
@@ -25,9 +23,10 @@ public class CustomerProgram {
 
     public CustomerProgram() {
     }
+
     private Customer findCustomer(String name) {
         for (Customer customer : customers) {
-            if (customer. getName().equals(name)) {
+            if (customer.getName().equals(name)) {
                 return customer;
             }
         }
@@ -42,7 +41,7 @@ public class CustomerProgram {
             System.out.println("Vänligen skriv in ditt användarnamn");
             userName = scanner.nextLine();
             for (String str : files) {
-                if (str.equalsIgnoreCase(userName + ".ser".toLowerCase())){
+                if (str.equalsIgnoreCase(userName + ".ser".toLowerCase())) {
                     Customer currentCustomer = (Customer) SaveAndLoadFile.loadObject(userName + ".ser");
                     System.out.println("Ange ditt lösenord?");
                     String userPass = scanner.nextLine();
@@ -57,43 +56,60 @@ public class CustomerProgram {
         } while (true);
     }
 
- public void borrowBook(User customerListToAddBookTo) {
-     customerListToAddBookTo.addBook( Program.getBookProgram().removeBooksFromLibrary(Program.getBookProgram().books,
-             "Vänligen fyll i vilken bok eller författare du vill låna",
-             "Din sökning gav flera resultat",
-             "Din sökning gav inget resultat",
-             "listan är tom"));
-     return;
- //    String bookOrAuthorName = scanner.nextLine();
- //    if( bookOrAuthorName.equals("9")){ return; }
-/*
-     Book selectedBook =  Program.getBookProgram().searchByTitleOrAuthorIfTrue("Vilken bok vill du låna?", "Boken du sökte finns inte, försök igen med exakt boktitel eller författarnamn", "Tyvärr är boken du sökte utlånad för tillfället");
-     if (selectedBook != null) {
-         customerListToAddBookTo.addBook(selectedBook);
-         System.out.println("Vad kul! Du lånade boken: " + selectedBook.getTitle() + ". Trevlig läsning :)");
-     }*/
+    public void borrowBook() {
+        Book book = Program.getBookProgram().returnBooksFromLibrary(Program.getBooks(),
+                "Vänligen fyll i vilken bok eller författare du vill låna",
+                "Din sökning gav flera resultat",
+                "Din sökning gav inget resultat",
+                "listan är tom");
+
+        if( book != null ) {
+            book.setReturnDate(Program.getBookProgram().setDateToBorrowBook(MAX_AMOUNT_OF_DAYS_TO_BORROW_BOOK));
+            Program.getCurrentUser().addBook(returnBookIfAvailable(book, "Tyvärr är boken redan utlånad"));
+            return;
+        }
     }
 
-    public void returnBook(User customerListToRemoveBookFrom) {
-        customerListToRemoveBookFrom.removeBook( Program.getBookProgram().removeBooksFromLibrary(Program.getBookProgram().books, "Vilken bok vill du lämna tillbaka?", "Din sökning gav flera resultat", "Din sökning gav inget resultat", "listan är tom"));
-
-//        customerListToRemoveBookFrom.removeBook( Program.getBookProgram().searchByTitleOrAuthorIfFalse("Vilken bok vill du lämna tillbaka?", "Du kan inte lämna tillbaka en bok du inte har lånat"));
+    public void returnBook() {
+        Book book = Program.getBookProgram().returnBooksFromLibrary(Program.getCurrentUser().getBooks(),
+                "Vänligen fyll i vilken bok eller författare du vill låna",
+                "Din sökning gav flera resultat",
+                "Din sökning gav inget resultat",
+                "listan är tom");
+        makeAvailable(Program.getBooks(), book);
+        Program.getCurrentUser().removeBook(book);
     }
 
- public void showMyBorrowedBooks(ArrayList<Book> listOfBooksToPrint) {
+    private void makeAvailable(ArrayList<Book> bookList, Book bookToMakeAvailable) {
+        if (bookToMakeAvailable != null) {
+            if (bookList.contains(bookToMakeAvailable)) {
+                bookToMakeAvailable.setAvailability(true);
+                return;
+            }
+        }
+    }
+
+    private Book returnBookIfAvailable(Book book, String msgIfFail) {
+        if (book.isAvailability() == true) {
+            book.setAvailability(false);
+            return book;
+        }
+        System.out.println(msgIfFail);
+        return null;
+    }
+
+    public void showMyBorrowedBooks(ArrayList<Book> listOfBooksToPrint) {
         for (Book book : listOfBooksToPrint) {
             System.out.println(Program.getBookProgram().showAllBookInformationAndAvailability(book));
         }
     }
 
-
-
     public void addBookByTitle() {
-       // myBorrowedBooks.add(Program.getBookProgram().searchByTitle("Vilken titel söker du?", "Tyvärr finns inte titeln du sökte, försök igen", "Tyvärr är boken utlånad för tillfället"));
+        // myBorrowedBooks.add(Program.getBookProgram().searchByTitle("Vilken titel söker du?", "Tyvärr finns inte titeln du sökte, försök igen", "Tyvärr är boken utlånad för tillfället"));
     }
 
     private void addBookByAuthor() {
-       // myBorrowedBooks.add(Program.getBookProgram().searchByAuthor("Vilken författare söker du?", "Tyvärr finns inte författaren du sökte, försök igen"));
+        // myBorrowedBooks.add(Program.getBookProgram().searchByAuthor("Vilken författare söker du?", "Tyvärr finns inte författaren du sökte, försök igen"));
 
     }
 }

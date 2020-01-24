@@ -25,7 +25,11 @@ public class User implements Serializable {
     }
 
     public void addBook(Book book) {
-        books.add(book);
+        if (book instanceof Book) {
+            books.add(book);
+            return;
+        }
+        return;
     }
 
     public void removeBook(Book book) {
