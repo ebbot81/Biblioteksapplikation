@@ -19,8 +19,8 @@ public class Program implements Serializable {
  //   private static ArrayList<Customer> customers = new ArrayList<>();
  //   private static ArrayList<Librarian> librarians = new ArrayList<>();
     private static User currentUser = null;
-    private static ArrayList<User> customers = new ArrayList<>();
-    private static ArrayList<User> librarians = new ArrayList<>();
+    private static ArrayList<User> users = new ArrayList<>();
+    private static Integer currentUserIndex = 0;
     private Integer[] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 31, 31};
     private LocalDate localDate = LocalDate.now();
     private final int MAX_ALLOWED_BORROW_DAY = 8;
@@ -32,7 +32,14 @@ public class Program implements Serializable {
     private int returnYear = localDate.getYear();
 
     public Program() {
-
+        /*System.out.println(users.size());
+        System.out.println(users.size());
+        for( User user : users){
+            System.out.println(user.getName());
+        }*/
+        //fileSaveFiles();
+        //fileLoadFiles();
+        start();
     }
 
 /*
@@ -120,6 +127,7 @@ public class Program implements Serializable {
                     if( userName.equals("9")){start();}
                 }
             } while (userName.isBlank() || userName.length() < 3);
+
             System.out.println("Välkommen " + userName + "! Ange ett lösenord");
             userPassword = scanner.nextLine();
             if( userPassword.equals("9")){start();}
@@ -130,22 +138,123 @@ public class Program implements Serializable {
             }
             if (trueForCustomerFalseForLibrarian == true) {
                 Customer customer = new Customer(userName, userPassword);
-                customers.add( customer );
-                currentUser = customer;
-                SaveAndLoadFile.saveObject(fileExt + userName + ".ser", checkUserByName(customers, userName));
+                users.add( customer );
+                currentUserIndex = returnUserIndex(customer);
+                SaveAndLoadFile.saveObject(fileExt + userName + ".ser", checkUserByName(users, userName));
                 //fileLoadSavedObject(fileExt + userName + ".ser");
             } else {
                 Librarian librarian = new Librarian(userName, userPassword);
-                librarians.add( librarian );
-                currentUser = librarian;
-                SaveAndLoadFile.saveObject(fileExt + userName + ".ser", checkUserByName(librarians, userName));
+                users.add( librarian );
+                currentUserIndex = returnUserIndex(librarian);
+                SaveAndLoadFile.saveObject(fileExt + userName + ".ser", checkUserByName(users, userName));
                 //fileLoadSavedObject(fileExt + userName + ".ser");
             }
-            fileLoadFiles();
+            fileSaveFiles();
+            //fileLoadFiles();
             return;
         }
     }
-    private void logIn(boolean trueForCustomerFalseForLibrarian) {
+
+    private void logIn(boolean customerIfTrueLibrarianIfFalse) {
+        System.out.println();
+        System.out.println("Vänligen fyll i ditt användarnamn ");
+        System.out.println("(Återgå till startmenyn genom att när som helst trycka [9])");
+        String userName = scanner.nextLine();
+        if (userName.equals("9")) {
+            return;
+        }
+
+        if (customerIfTrueLibrarianIfFalse) {
+            while (searchForCustomerByName(users, userName) == null) {
+                System.out.println("Användarnamnet finns ej registrerat. Vänligen försök igen.");
+                System.out.println("(Återgå till startmenyn genom att när som helst trycka [9])");
+                userName = scanner.nextLine();
+                if (userName.equals("9")) {
+                    return;
+                }
+            }
+
+            System.out.println("Ange ditt lösenord?");
+            String userPass = scanner.nextLine();
+            if (userPass.equals("9")) {
+                return;
+            }
+
+            while (!searchForCustomerByName(users, userName).getPassword().equals(userPass)) {
+                System.out.println("Lösenordet stämmer inte. Vänligen försök igen.");
+                System.out.println("(Återgå till startmenyn genom att när som helst trycka [9])");
+                userPass = scanner.nextLine();
+                if (userPass.equals("9")) {
+                    return;
+                }
+            }
+
+            currentUserIndex = returnUserIndex(searchForCustomerOrLibrarianByName(users, userName));
+            customerMenu();
+
+        } else {
+
+            while (searchForLibrarianByName(users, userName) == null) {
+                System.out.println("Användarnamnet finns ej registrerat. Vänligen försök igen.");
+                System.out.println("(Återgå till startmenyn genom att när som helst trycka [9])");
+                userName = scanner.nextLine();
+                if (userName.equals("9")) {
+                    return;
+                }
+            }
+
+            System.out.println("Ange ditt lösenord?");
+            String userPass = scanner.nextLine();
+            if (userPass.equals("9")) {
+                return;
+            }
+
+            while (!searchForLibrarianByName(users, userName).getPassword().equals(userPass)) {
+                System.out.println("Lösenordet stämmer inte. Vänligen försök igen.");
+                System.out.println("(Återgå till startmenyn genom att när som helst trycka [9])");
+                userPass = scanner.nextLine();
+                if (userPass.equals("9")) {
+                    return;
+                }
+            }
+
+            librarianMenu();
+        }
+    }
+
+    private User searchForCustomerOrLibrarianByName(ArrayList<User> userList, String CustomerOrLibrarianName) {
+        for (User user : userList) {
+            if (user.getName().equalsIgnoreCase(CustomerOrLibrarianName) && user instanceof Customer) {
+                return user;
+            } else if (user.getName().equalsIgnoreCase(CustomerOrLibrarianName) && user instanceof Librarian) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    private User searchForCustomerByName(ArrayList<User> userList, String customerName) {
+        for (User user : userList) {
+            if (user.getName().equalsIgnoreCase(customerName) && user instanceof Customer) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    private User searchForLibrarianByName(ArrayList<User> userList, String librarianName) {
+        for (User user : userList) {
+            if (user.getName().equalsIgnoreCase(librarianName) && user instanceof Librarian) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    private int returnUserIndex(User user) {
+        return users.indexOf(user);
+    }
+    /*private void logIn(boolean trueForCustomerFalseForLibrarian) {
         boolean createAccountForCustomer = trueForCustomerFalseForLibrarian;
         String fileExt = "";
         if (createAccountForCustomer == true) {
@@ -161,24 +270,32 @@ public class Program implements Serializable {
         do {
             for (String str : files) {
                 if (str.equalsIgnoreCase(fileExt + userName + ".ser")) {
-                    currentUser = (User) SaveAndLoadFile.loadObject(fileExt + userName + ".ser");
-                    fileLoadFiles();
+                    User user = (User) SaveAndLoadFile.loadObject(fileExt + userName + ".ser");
+                    currentUserIndex = returnUserIndex(user) + 1;
                     System.out.println("Ange ditt lösenord?");
                     String userPass = scanner.nextLine();
                     if( userPass.equals("9")){start();}
-                    while (!currentUser.getPassword().equals(userPass)) {
+
+                    while (!user.getPassword().equals(userPass)) {
                         System.out.println("Lösenordet stämmer inte. Vänligen försök igen eller tryck [9] för att återvända till startmenyn.");
                         userPass = scanner.nextLine();
                         if( userPass.equals("9")){start();}
                     }
+                    System.out.println(users.size());
+                    fileSaveFiles();
                     return;
                 }
             }
             System.out.println("Användarnamnet finns ej registrerat. Försök igen eller tryck [9] för att återvända till startmenyn.");
             userName = scanner.nextLine();
             if( userName.equals("9")){start();}
+            fileSaveFiles();
+            System.out.println(users.size());
         } while (true);
     }
+    private int returnUserIndex(User user) {
+        return users.indexOf(user);
+    }*/
     private boolean checkIfUserAlreadyExists(String userName) {
         File file = new File("./");
         String[] files = file.list();
@@ -198,12 +315,13 @@ public class Program implements Serializable {
         return null;
     }
     private void fileLoadFiles() {
-        customers = (ArrayList<User>) SaveAndLoadFile.loadObject("customers.ser");
-        librarians = (ArrayList<User>) SaveAndLoadFile.loadObject("librarians.ser");
+        users = (ArrayList<User>) SaveAndLoadFile.loadObject("users.ser");
         books = (ArrayList<Book>) SaveAndLoadFile.loadObject("books.ser");
     }
     private void fileSaveFiles() {
-        if (currentUser instanceof Customer) {
+        SaveAndLoadFile.saveObject("users.ser", users);
+        SaveAndLoadFile.saveObject("books.ser", books);
+     /*   if (currentUser instanceof Customer) {
             SaveAndLoadFile.saveObject("_customer_" + currentUser.getName() + ".ser", currentUser);
             SaveAndLoadFile.saveObject("books.ser", books);
             SaveAndLoadFile.saveObject("customers.ser", customers);
@@ -213,42 +331,12 @@ public class Program implements Serializable {
         SaveAndLoadFile.saveObject("_librarian_" + currentUser.getName() + ".ser", currentUser);
         SaveAndLoadFile.saveObject("books.ser", books);
         SaveAndLoadFile.saveObject("customers.ser", customers);
-        SaveAndLoadFile.saveObject("librarians.ser", librarians);
+        SaveAndLoadFile.saveObject("librarians.ser", librarians);*/
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////D
 
-    private void sortByTitle() {
-        Collections.sort(books, new Sort.sortByTitle());
-    }
-
-    private void sortByAuthor() {
-        Collections.sort(books, new Sort.sortByAuthor());
-    }
-
-    private void addCustomer() {
-        System.out.println("Hej och välkommen!");
-        do {
-            System.out.println("Skriv in användarnamn: ");
-            String userName = scanner.nextLine();
-            System.out.println("Skriv in ditt lösenord: ");
-            String userPassword = scanner.nextLine();
-            System.out.println("Skriv in lösenordet igen: ");
-            String userPasswordAgain = scanner.nextLine();
-
-            while (!userPassword.equals(userPasswordAgain)) {
-                System.out.println("Lösenordet var inte korrekt, försök igen");
-                System.out.println("Skriv in ditt lösenord: ");
-                userPassword = scanner.nextLine();
-                System.out.println("Skriv in lösenordet igen: ");
-                userPasswordAgain = scanner.nextLine();
-            }
-            customers.add(new Customer(userName, userPassword));
-            //    SaveAndLoadFile.saveObject(userName +".ser", customers.add(new Customer(userName, userPassword)));
-            return;
-        } while (true);
-    }
-
     public void start() {
+        fileLoadFiles();
         int chooseMenu;
         do {
             System.out.println("\nVÄLKOMMEN TILL BIBLIOTEKSAPPEN");
@@ -274,21 +362,23 @@ public class Program implements Serializable {
             switch (chooseMenu) {
                 case 1:
                     logIn(true);
-                    customerMenu();
+                    start();
                     break;
                 case 2:
                     logIn(false);
-                    librarianMenu();
+                    start();
                     break;
                 case 3:
                     createAccount(true);
+                    start();
                     break;
                 case 4:
                     createAccount(false);
-                    return;
-                case 5:
                     start();
-                    return;
+                    break;
+                case 5:
+                    exitProgram();
+                    break;
                 default:
                     break;
             }
@@ -306,24 +396,28 @@ public class Program implements Serializable {
             System.out.println("[3] LÅNA EN BOK");
             System.out.println("[4] SE VILKA BÖCKER DU LÅNAT");
             System.out.println("[5] LÄMNA TILLBAKA EN BOK");
-            System.out.println("[6] AVSLUTA");
+            System.out.println("[6] VISA LISTAN SORTERAD EFTER TITEL");
+            System.out.println("[7] VISA LISTAN SORTERAD EFTER FÖRFATTARE");
+            System.out.println("[8] SE HUR LÅNG TID DET ÄR KVAR PÅ DINA LÅNADE BÖCKER");
+            System.out.println("[9] GÅ TILL STARTMENYN");
 
             do {
                 try {
                     custMenu = Integer.parseInt(scanner.nextLine());
-                    if (custMenu < 1 || custMenu > 6) {
+                    if (custMenu < 1 || custMenu > 9) {
                         throw new IndexOutOfBoundsException();
                     }
                     break;
                 } catch (Exception e) {
-                    System.out.println("Välj ett nummer mellan 1-6");
+                    System.out.println("Välj ett nummer mellan 1-9");
                 }
             } while (true);
 
             switch (custMenu) {
                 case 1:
+                    bookProgram.notificationMsgForBorrowDays(users.get(currentUserIndex).getBooks());
                     bookProgram.headLines();
-                    bookProgram.showAllBookInformationWithOutAvailability(bookProgram.books);
+                    bookProgram.showAllBookInformationWithOutAvailability(books);
                     break;
                 case 2:
                     bookProgram.headLinesAndStatus();
@@ -333,18 +427,35 @@ public class Program implements Serializable {
                 case 3:
                     bookProgram.headLinesAndStatus();
                     bookProgram.showAllBookList();
-                    customerProgram.borrowBook(currentUser);
+                    customerProgram.borrowBook();
                     break;
                 case 4:
                     bookProgram.headLinesAndStatus();
-                    customerProgram.showMyBorrowedBooks(currentUser.getBooks());
+                    customerProgram.showMyBorrowedBooks(users.get(currentUserIndex).getBooks());
                     break;
                 case 5:
                     bookProgram.headLinesAndStatus();
-                    customerProgram.showMyBorrowedBooks(currentUser.getBooks());
-                    customerProgram.returnBook(currentUser);
+                    customerProgram.showMyBorrowedBooks(users.get(currentUserIndex).getBooks());
+                    customerProgram.returnBook();
                     break;
                 case 6:
+                    bookProgram.headLines();
+                    bookProgram.sortByTitle(books);
+                    bookProgram.showAllBookInformationWithOutAvailability(books);
+                    customerMenu();
+                    break;
+                case 7:
+                    bookProgram.headLines();
+                    bookProgram.sortByAuthor(books);
+                    bookProgram.showAllBookInformationWithOutAvailability(books);
+                    customerMenu();
+                    break;
+                case 8:
+                    bookProgram.notificationMsgForBorrowDays(users.get(currentUserIndex).getBooks());
+                //    customerMenu();
+                    break;
+                case 9:
+                    fileSaveFiles();
                     start();
                     return;
                 default:
@@ -384,7 +495,7 @@ public class Program implements Serializable {
             switch (libMenu) {
                 case 1:
                     bookProgram.headLines();
-                    bookProgram.showAllBookInformationWithOutAvailability(bookProgram.books);
+                    bookProgram.showAllBookInformationWithOutAvailability(books);
                     break;
                 case 2:
                     bookProgram.headLinesAndStatus();
@@ -404,17 +515,20 @@ public class Program implements Serializable {
                 case 6:
                     System.out.println("HÄR KAN DU SE ALLA ANVÄNDARE SOM FINNS I SYSTEMET: ");
                     System.out.println("------------------------------------------------\n ");
-                    librarianProgram.showUserNameAndOrBooks(customers, false);
+                    librarianProgram.showUserNameAndOrBooks(users, false);
                     break;
                 case 7:
-                    librarianProgram.showUserByName(customers, "Välkommen, skriv in namnet på användaren du söker", "Systemet hittade flera users på din sökning, vänligen specificera", "Din sökning hittades inte", "Listan är tom");
+                    System.out.println("DESSA ANVÄNDARE FINNS I SYSTEMET");
+                    librarianProgram.showUserNameAndOrBooks(users, false);
+                    librarianProgram.showUserByName(users, "Välkommen, skriv in namnet på användaren du söker", "Systemet hittade flera users på din sökning, vänligen specificera", "Din sökning hittades inte", "Listan är tom");
                     break;
                 case 8:
                     System.out.println("HÄR KAN DU SE VILKA BÖCKER ANVÄNDARNA HAR LÅNAT: ");
                     System.out.println("----------------------------------------------\n ");
-                    librarianProgram.showUserNameAndOrBooks(customers, true);
+                    librarianProgram.showUserNameAndOrBooks(users, true);
                     break;
                 case 9:
+                    fileSaveFiles();
                     start();
                     return;
                 default:
@@ -429,7 +543,7 @@ public class Program implements Serializable {
             System.out.println("Skriv in ditt användarnamn: ");
             try {
                 String userName = scanner.nextLine();
-                currentUser = (Customer) SaveAndLoadFile.loadObject(userName + ".ser");
+                User user  = (Customer) SaveAndLoadFile.loadObject(userName + ".ser");
             } catch (Exception e) {
                 System.out.println("Inkorrekt användarnamn");
             }
@@ -437,7 +551,7 @@ public class Program implements Serializable {
             do{
                 System.out.println("Skriv in lösenordet");
                 userPassword = scanner.nextLine();
-            }while (!currentUser.getPassword().equals(userPassword));
+            }while (!users.get(currentUserIndex).getPassword().equals(userPassword));
             System.out.println("Korrekt inloggning");
             return;
         } while (true);
@@ -451,15 +565,20 @@ public class Program implements Serializable {
         return bookProgram;
     }
 
-    public static ArrayList<User> getCustomers() {
-        return customers;
+    public static ArrayList<Book> getBooks() {
+        return books;
     }
 
-    public static ArrayList<User> getLibrarians() {
-        return librarians;
+    public static ArrayList<User> getCustomers() {
+        return users;
     }
+
 
     public static User getCurrentUser() {
-        return currentUser;
+        return users.get(currentUserIndex);
+    }
+
+    private void exitProgram() {
+        System.exit(0);
     }
 }
