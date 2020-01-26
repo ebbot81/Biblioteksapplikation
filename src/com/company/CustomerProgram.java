@@ -31,16 +31,15 @@ public class CustomerProgram {
                 "Din sökning gav flera resultat",
                 "Din sökning gav inget resultat",
                 "listan är tom");
-        makeAvailable(Program.getBooks(), book);
-        Program.getCurrentUser().removeBook(book);
-    }
-
-    private void makeAvailable(ArrayList<Book> bookList, Book bookToMakeAvailable) {
-        if (bookToMakeAvailable != null) {
-            if (bookList.contains(bookToMakeAvailable)) {
-                bookToMakeAvailable.setAvailability(true);
-                return;
+        if (book != null) {
+            for (Book librarianBook : Program.getBooks()) {
+                if (librarianBook.getTitle().equals(book.getTitle()) &&
+                        librarianBook.getAuthor().equals(book.getAuthor()) &&
+                        librarianBook.getInformation().equals(book.getInformation())) {
+                    librarianBook.setAvailability(true);
+                }
             }
+            Program.getCurrentUser().removeBook(book);
         }
     }
 
