@@ -6,7 +6,6 @@ import java.util.Scanner;
 public class LibrarianProgram {
 
     Scanner scanner = new Scanner(System.in);
-    private ArrayList<String> books = new ArrayList<>();
 
     public void showUserNameAndOrBooks(ArrayList<User> userList, boolean showUserBooksOrNot) {
         if (userList.size() > 0) {
@@ -47,7 +46,7 @@ public class LibrarianProgram {
     }
 
     public void removeBookFromList() {
-        Program.getBookProgram().books.remove(Program.getBookProgram().returnBooksFromLibrary(Program.getBookProgram().books, "Vilken bok vill du ta bort?", "Din sökning gav flera resultat", "Din sökning gav inget resultat", "listan är tom"));
+        Program.getBooks().remove(Program.getBookProgram().returnBooksFromLibrary(Program.getBooks(), "Vilken bok vill du ta bort?", "Din sökning gav flera resultat", "Din sökning gav inget resultat", "listan är tom"));
     }
 
     public void showUserByName(ArrayList<User> userListToReturnFrom, String msgWelcome, String msgRefineSearch, String msgIfFail, String msgIfEmptyList) {

@@ -2,107 +2,21 @@ package com.company;
 
 import java.io.File;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Scanner;
 
 public class Program implements Serializable {
-    public static Program program;
     public transient Scanner scanner = new Scanner(System.in);
     private static BookProgram bookProgram = new BookProgram();
     private static ArrayList<Book> books = bookProgram.books;
     private static CustomerProgram customerProgram = new CustomerProgram();
     private static LibrarianProgram librarianProgram = new LibrarianProgram();
- //   private static ArrayList<Customer> customers = new ArrayList<>();
- //   private static ArrayList<Librarian> librarians = new ArrayList<>();
-    private static User currentUser = null;
     private static ArrayList<User> users = new ArrayList<>();
     private static Integer currentUserIndex = 0;
-    private Integer[] monthDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 31, 31};
-    private LocalDate localDate = LocalDate.now();
-    private final int MAX_ALLOWED_BORROW_DAY = 8;
-    private int thisDay = localDate.getDayOfMonth();
-    private int thisMonth = localDate.getMonthValue();
-    private int thisYear = localDate.getYear();
-    private int returnDay = localDate.getDayOfMonth();
-    private int returnMonth = localDate.getMonthValue();
-    private int returnYear = localDate.getYear();
 
     public Program() {
-        /*System.out.println(users.size());
-        System.out.println(users.size());
-        for( User user : users){
-            System.out.println(user.getName());
-        }*/
-        //fileSaveFiles();
-        //fileLoadFiles();
         start();
     }
-
-/*
-        int restDay = 0;
-        int remainDay = 0;
-        int totalDay = thisDay + MAX_ALLOWED_BORROW_DAY;
-        int rounds = 0;
-        int currentDaysOfMonth = monthDays[thisMonth - 1];
-
-        int time = thisDay + 14;
-        int next = 0;
-
-        while (time > 0) {
-            int i = 0;
-            next++;
-            time -= 1;
-            if (next >= monthDays[thisMonth - i]) {
-                returnDay = time;
-                i++;
-                next = 0;
-                returnMonth++;
-                if (returnMonth > monthDays.length) {
-                    returnYear++;
-                }
-            }
-        }
-            System.out.println(returnDay);
-            System.out.println(returnMonth);
-            System.out.println(returnYear);
-        }
-
-*/
-/*
-        String lastDayToReturnBook;  // Start lastDayToReturnBook
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, 14);  // number of days to add
-        lastDayToReturnBook = sdf.format(calendar.getTime());  // dt is now the new lastDayToReturnBook
-        System.out.println(lastDayToReturnBook);
-
-        customers.add(new Customer("Hassan", "1111"));
-        customers.add(new Customer("Tobbe", "1111"));
-        customers.add(new Customer("Viktor", "1111"));
-        customers.add(new Customer("Johan", "1111"));
-
-        System.out.println(customers.get(0).getBorrowDay());
-
-        System.out.println(localDate);
-        if (localDate.getDayOfMonth() == Integer.parseInt(lastDayToReturnBook)) {
-            System.out.println("samma dag");
-
-        }else if (localDate.getDayOfMonth() <= Integer.parseInt(lastDayToReturnBook)) {
-            System.out.println("Du har: " + lastDayToReturnBook + "dagar kvar");
-        }else {
-            System.out.println("Du är sen med återlämningen av boken" + lastDayToReturnBook);
-        }*/
-        /*}
-        Calendar c = Calendar.getInstance();
-        c.add( Calendar.DATE, 370);  // number of days to add
-        System.out.println(returnDay);
-        System.out.println(returnMonth);
-        System.out.println(c.getTime());
-   */
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////D
     private void createAccount(boolean trueForCustomerFalseForLibrarian) {
@@ -254,48 +168,7 @@ public class Program implements Serializable {
     private int returnUserIndex(User user) {
         return users.indexOf(user);
     }
-    /*private void logIn(boolean trueForCustomerFalseForLibrarian) {
-        boolean createAccountForCustomer = trueForCustomerFalseForLibrarian;
-        String fileExt = "";
-        if (createAccountForCustomer == true) {
-            fileExt = "_customer_";
-        } else {
-            fileExt = "_librarian_";
-        }
-        File file = new File("./");
-        String[] files = file.list();
-        System.out.println("Vänligen fyll i ditt användarnamn eller tryck [9] för att återvända till startmenyn.");
-        String userName = scanner.nextLine();
-        if( userName.equals("9")){start();}
-        do {
-            for (String str : files) {
-                if (str.equalsIgnoreCase(fileExt + userName + ".ser")) {
-                    User user = (User) SaveAndLoadFile.loadObject(fileExt + userName + ".ser");
-                    currentUserIndex = returnUserIndex(user) + 1;
-                    System.out.println("Ange ditt lösenord?");
-                    String userPass = scanner.nextLine();
-                    if( userPass.equals("9")){start();}
 
-                    while (!user.getPassword().equals(userPass)) {
-                        System.out.println("Lösenordet stämmer inte. Vänligen försök igen eller tryck [9] för att återvända till startmenyn.");
-                        userPass = scanner.nextLine();
-                        if( userPass.equals("9")){start();}
-                    }
-                    System.out.println(users.size());
-                    fileSaveFiles();
-                    return;
-                }
-            }
-            System.out.println("Användarnamnet finns ej registrerat. Försök igen eller tryck [9] för att återvända till startmenyn.");
-            userName = scanner.nextLine();
-            if( userName.equals("9")){start();}
-            fileSaveFiles();
-            System.out.println(users.size());
-        } while (true);
-    }
-    private int returnUserIndex(User user) {
-        return users.indexOf(user);
-    }*/
     private boolean checkIfUserAlreadyExists(String userName) {
         File file = new File("./");
         String[] files = file.list();
@@ -422,7 +295,6 @@ public class Program implements Serializable {
                 case 2:
                     bookProgram.headLinesAndStatus();
                     bookProgram.showAllBookList();
-               //     bookProgram.showAllBookInformationWithOutAvailability(bookProgram.books);
                     break;
                 case 3:
                     bookProgram.headLinesAndStatus();
@@ -452,7 +324,6 @@ public class Program implements Serializable {
                     break;
                 case 8:
                     bookProgram.notificationMsgForBorrowDays(users.get(currentUserIndex).getBooks());
-                //    customerMenu();
                     break;
                 case 9:
                     fileSaveFiles();
@@ -478,7 +349,7 @@ public class Program implements Serializable {
             System.out.println("[6] SE EN LISTA PÅ ALLA ANVÄNDARE");
             System.out.println("[7] SÖKA PÅ SPECIFIK ANVÄNDARE");
             System.out.println("[8] SE EN LISTA PÅ ANVÄNDARNAS LÅNADE BÖCKER");
-            System.out.println("[9] AVSLUTA");
+            System.out.println("[9] GÅ TILL STARTMENYN");
 
             do {
                 try {
@@ -537,30 +408,6 @@ public class Program implements Serializable {
         } while (true);
     }
 
-    private void login() {
-        System.out.println("Hej och välkommen, vänligen fyll i dina uppgifter och tryck sedan på ENTER");
-        do {
-            System.out.println("Skriv in ditt användarnamn: ");
-            try {
-                String userName = scanner.nextLine();
-                User user  = (Customer) SaveAndLoadFile.loadObject(userName + ".ser");
-            } catch (Exception e) {
-                System.out.println("Inkorrekt användarnamn");
-            }
-            String userPassword = "";
-            do{
-                System.out.println("Skriv in lösenordet");
-                userPassword = scanner.nextLine();
-            }while (!users.get(currentUserIndex).getPassword().equals(userPassword));
-            System.out.println("Korrekt inloggning");
-            return;
-        } while (true);
-    }
-
-    public static CustomerProgram getCustomerProgram() {
-        return customerProgram;
-    }
-
     public static BookProgram getBookProgram() {
         return bookProgram;
     }
@@ -568,11 +415,6 @@ public class Program implements Serializable {
     public static ArrayList<Book> getBooks() {
         return books;
     }
-
-    public static ArrayList<User> getCustomers() {
-        return users;
-    }
-
 
     public static User getCurrentUser() {
         return users.get(currentUserIndex);

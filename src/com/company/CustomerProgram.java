@@ -6,54 +6,9 @@ import java.util.Scanner;
 
 public class CustomerProgram {
 
-    ArrayList<Customer> customers = new ArrayList<>();
-    private Scanner scanner = new Scanner(System.in);
     private final int MAX_AMOUNT_OF_DAYS_TO_BORROW_BOOK = 7;
 
- /*   public CustomerProgram() {
-        System.out.println(myBorrowedBooks.size());
-        addBookByTitle();
-        System.out.println(myBorrowedBooks.size());
-        showMyBorrowedBooks();
-        addBookByTitle();
-        System.out.println(myBorrowedBooks.size());
-
-    }
-*/
-
     public CustomerProgram() {
-    }
-
-    private Customer findCustomer(String name) {
-        for (Customer customer : customers) {
-            if (customer.getName().equals(name)) {
-                return customer;
-            }
-        }
-        return null;
-    }
-
-    private void logInUser() {
-        File file = new File("./");
-        String[] files = file.list();
-        String userName = "";
-        do {
-            System.out.println("Vänligen skriv in ditt användarnamn");
-            userName = scanner.nextLine();
-            for (String str : files) {
-                if (str.equalsIgnoreCase(userName + ".ser".toLowerCase())) {
-                    Customer currentCustomer = (Customer) SaveAndLoadFile.loadObject(userName + ".ser");
-                    System.out.println("Ange ditt lösenord?");
-                    String userPass = scanner.nextLine();
-                    while (!currentCustomer.getPassword().equals(userPass)) {
-                        System.out.println("Lösenordet stämmer inte, vänligen försök igen!");
-                        userPass = scanner.nextLine();
-                    }
-                    System.out.println("Välkommen tillbaka " + currentCustomer.getName());
-                    return;
-                }
-            }
-        } while (true);
     }
 
     public void borrowBook() {
@@ -102,14 +57,5 @@ public class CustomerProgram {
         for (Book book : listOfBooksToPrint) {
             System.out.println(Program.getBookProgram().showAllBookInformationAndAvailability(book));
         }
-    }
-
-    public void addBookByTitle() {
-        // myBorrowedBooks.add(Program.getBookProgram().searchByTitle("Vilken titel söker du?", "Tyvärr finns inte titeln du sökte, försök igen", "Tyvärr är boken utlånad för tillfället"));
-    }
-
-    private void addBookByAuthor() {
-        // myBorrowedBooks.add(Program.getBookProgram().searchByAuthor("Vilken författare söker du?", "Tyvärr finns inte författaren du sökte, försök igen"));
-
     }
 }
